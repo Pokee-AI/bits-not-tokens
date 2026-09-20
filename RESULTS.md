@@ -32,7 +32,7 @@ and its slope for a = 0.5 is shallower than both the prediction and the ideal le
 
 ## 2. Change in β between n = 0 and n = 64
 
-- a = 0.5: β(n64) − β(n0) = **+0.031** (0.276 − 0.245); per-seed range of the difference 0.029–0.035.
+- a = 0.5: β(n64) − β(n0) = **+0.031** (0.276 − 0.245); per-seed range of the difference 0.029–0.036.
 - a = 1.0: β(n64) − β(n0) = **+0.075** (0.563 − 0.488); per-seed range 0.032–0.112.
 
 Both exceed the 0.03 criterion (a = 0.5 marginally, a = 1.0 clearly). Filler makes the
