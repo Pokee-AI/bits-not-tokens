@@ -4,7 +4,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 gpu=$1; corpus=$2; seed=$3; shift 3
-tag=""
+tag=""; prev=""
 for a in "$@"; do [[ $prev == "--tag" ]] && tag="_$a"; prev=$a; done
 log="$ROOT/logs/${corpus}_seed${seed}${tag}.log"
 cd "$ROOT"
