@@ -13,12 +13,13 @@ from analysis.common import CORPORA, PREDICTED_BETA, ROOT, load_runs  # noqa: E4
 LO, HI = 0.05, 6.0  # loss window in bits
 
 
-def fit_slope(docs, loss):
-    m = (loss >= LO) & (loss <= HI)
+def fit_slope(docs, loss, mask=None):
+    """-slope of log(loss) vs log(docs). Default mask: points with LO <= loss <= HI."""
+    m = ((loss >= LO) & (loss <= HI)) if mask is None else mask
     if m.sum() < 2:
-        return np.nan, int(m.sum())
+        return np.nan, int(m.sum()), m
     slope = np.polyfit(np.log(docs[m]), np.log(loss[m]), 1)[0]
-    return -slope, int(m.sum())
+    return -slope, int(m.sum()), m
 
 
 def fit_all(df: pd.DataFrame) -> pd.DataFrame:
@@ -28,12 +29,14 @@ def fit_all(df: pd.DataFrame) -> pd.DataFrame:
             continue
         for seed, g in df[df.corpus == c].groupby("seed"):
             g = g.sort_values("docs")
-            beta, n = fit_slope(g.docs.values, g.obj_loss_bits_indist.values)
-            beta_ideal, _ = fit_slope(g.docs.values, g.ideal_loss_bits.values)
+            beta, n, mask = fit_slope(g.docs.values, g.obj_loss_bits_indist.values)
+            # ideal learner fitted over the same document range (same points)
+            beta_ideal, _, _ = fit_slope(g.docs.values, g.ideal_loss_bits.values, mask)
             rows.append({"corpus": c, "zipf_a": g.zipf_a.iloc[0], "filler_n": g.filler_n.iloc[0],
                          "seed": seed, "beta": beta, "beta_ideal_same_range": beta_ideal,
                          "beta_predicted": PREDICTED_BETA[float(g.zipf_a.iloc[0])],
-                         "n_points": n})
+                         "n_points": n, "docs_min": g.docs.values[mask].min() if n else np.nan,
+                         "docs_max": g.docs.values[mask].max() if n else np.nan})
     out = pd.DataFrame(rows)
     out.to_csv(os.path.join(ROOT, "results", "beta_fits.csv"), index=False)
     return out
