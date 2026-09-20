@@ -1,0 +1,5 @@
+name: Z10_n64
+sampling: zipf
+zipf_a: 1.0
+filler_n: 64
+max_docs: 10000000

@@ -1,0 +1,6 @@
+name: EQ4_n16
+sampling: eq
+repeats: 4
+zipf_a: null
+filler_n: 16
+max_docs: 4000000

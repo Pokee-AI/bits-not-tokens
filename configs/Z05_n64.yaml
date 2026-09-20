@@ -1,0 +1,5 @@
+name: Z05_n64
+sampling: zipf
+zipf_a: 0.5
+filler_n: 64
+max_docs: 10000000

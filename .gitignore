@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+artifacts/
+logs/*.log
+logs/*.out
+*.pt
+*.npz
+.pytest_cache/
