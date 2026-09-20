@@ -58,10 +58,10 @@ def load_nk(df: pd.DataFrame) -> dict:
     return out
 
 
-def fit_n0(df: pd.DataFrame, nk: dict):
+def fit_n0(df: pd.DataFrame, nk: dict, exclude=()):
     """Single n0 across all corpora and seeds: minimise the residual of a straight-line
     fit of log(bits_stored) on log(I_eff). Points with bits_stored <= 0 are excluded."""
-    pts = [(k, v) for k, v in nk.items()]
+    pts = [(k, v) for k, v in nk.items() if k[0] not in exclude]
     d = df.set_index(["corpus", "seed", "docs"])
     y = np.array([d.loc[k, "bits_stored"] for k, _ in pts], float)
     keep = y > 0
@@ -109,10 +109,14 @@ def run(df: pd.DataFrame):
     ie.to_csv(os.path.join(ROOT, "results", "ieff.csv"), index=False)
     isp = ieff_spreads(ie)
     isp.to_csv(os.path.join(ROOT, "results", "ieff_spreads.csv"), index=False)
+    # Diagnostic (not pre-registered): the same fit with EQ4 excluded.
+    n0_x, ie_x, _, _ = fit_n0(df, nk, exclude=("EQ4_n16",))
+    isp_x = ieff_spreads(ie_x)
     row3 = sp[sp["T"] == 3000].iloc[0] if (sp["T"] == 3000).any() else None
     h2 = bool(row3 is not None and row3.spread_tokens >= 10 and row3.spread_bits <= 2)
     return {"crossings": cross, "spreads": sp, "n0": n0, "ieff": ie, "ieff_spreads": isp,
-            "n0_points_used": n_used, "n0_points_dropped": n_dropped, "H2_PASS": h2}
+            "n0_points_used": n_used, "n0_points_dropped": n_dropped, "H2_PASS": h2,
+            "n0_excl_eq4": n0_x, "ieff_spreads_excl_eq4": isp_x}
 
 
 if __name__ == "__main__":

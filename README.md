@@ -1,0 +1,52 @@
+# Bits, not tokens
+
+A small synthetic-world experiment: 1,000,000 facts of exactly 12 bits each, documents that
+wrap one fact in template + filler noise, and a 31M-parameter GPT trained single-pass on
+five corpora that differ in redundancy (Zipf exponent) and noise (filler length). Every
+measurement point records the exact number of facts (bits) the data has delivered so far
+and how many the model has stored.
+
+Hypotheses (pre-registered in `PASS_CRITERIA.md`):
+- **H1** the data-scaling exponent is set by the corpus's Zipf exponent, not by the learner;
+- **H2** learning curves that disagree against training tokens collapse against bits delivered.
+
+Results: `RESULTS.md`. Deviations from the brief: `DEVIATIONS.md`.
+
+## Quickstart (3 commands)
+
+```bash
+uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requirements.txt
+.venv/bin/python -m pytest -q && .venv/bin/python -m pytest -q -m slow      # CPU tests + GPU learnability test
+scripts/run_all.sh "1 2" && .venv/bin/python analysis/make_figures.py        # matrix on idle GPUs; figures + results/summary.json
+```
+
+`scripts/run_all.sh` launches one run per idle GPU under `nohup` (logs in `logs/`); rerun it
+when GPUs free up — it skips runs whose CSV exists. A single run:
+`.venv/bin/python train/train.py --corpus configs/Z05_n0.yaml --seed 1`.
+
+## Layout
+
+```
+configs/            one YAML per corpus + common.yaml (model/optimizer/eval, frozen LR)
+synth/world.py      facts, popularity permutation, templates, vocabulary, document builder
+synth/stream.py     Zipf / EQ document streams with snapshot/restore, exact n_k counter
+synth/information.py closed forms (expected facts delivered, ideal-learner loss), I_eff
+train/model.py      GPT-2-style decoder (10 layers, d=512, 31.5M non-embedding params)
+train/train.py      constant-LR main run + in-memory cooldown branches at each D_i
+eval/evaluate.py    in-distribution object loss, facts stored, unseen control, soft measure
+analysis/           fit_beta.py (H1), collapse.py (H2, I_eff/n0), make_figures.py (all outputs)
+results/            runs/<run>.csv, runs.csv (merged), lr_sweep.csv, summary.json, fits
+figures/            fig1_collapse, fig2_beta, supplementary
+artifacts/          n_k arrays and configs per run (not committed)
+tests/              generator determinism, closed form, document format, EQ4, learnability
+```
+
+## Notes
+
+- World seed 0 everywhere; a run is determined by (corpus config, run seed). Every CSV row
+  carries the git commit and a config hash.
+- Object losses are in bits over the 4,096-object softmax (see `DEVIATIONS.md` #1).
+- Environment used: 8× H100 80GB, torch 2.10.0+cu128, Python 3.12.13 (`logs/env.txt`).
+  Each Zipf run (10M documents + cooldown branches) takes ~15 min on one H100; EQ4 ~7 min.
+
+License: Apache 2.0.

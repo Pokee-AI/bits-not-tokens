@@ -28,8 +28,10 @@ def save(fig, name):
 
 def fig1_collapse(df: pd.DataFrame):
     """Headline: bits stored vs training tokens (left) and vs bits delivered (right)."""
-    fig, axes = plt.subplots(1, 2, figsize=(13, 6.2), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(14, 7.5), sharey=True)
     m = seed_mean(df, ["bits_stored", "train_tokens", "bits_delivered"])
+    pos = m[m.bits_stored > 0]
+    ymin, ymax = pos.bits_stored.min() * 0.5, pos.bits_stored.max() * 2.5
     for ax, xcol, xlabel in zip(axes, ["train_tokens", "bits_delivered"],
                                 ["Training tokens", "Bits of knowledge delivered by the data"]):
         for c in CORPORA:
@@ -38,25 +40,31 @@ def fig1_collapse(df: pd.DataFrame):
                 continue
             for _, s in g.groupby("seed"):
                 s = s.sort_values("docs")
-                ax.plot(s[xcol], s.bits_stored.clip(lower=1), color=COLORS[c], lw=0.8, alpha=0.45)
+                ax.plot(s[xcol], s.bits_stored.clip(lower=ymin), color=COLORS[c], lw=0.8, alpha=0.45)
             gm = m[m.corpus == c].sort_values("docs")
-            ax.plot(gm[xcol], gm.bits_stored.clip(lower=1), color=COLORS[c], lw=2.4,
-                    marker=MARKERS[int(g.filler_n.iloc[0])], ms=5, label=LABELS[c])
+            ax.plot(gm[xcol], gm.bits_stored.clip(lower=ymin), color=COLORS[c], lw=2.4,
+                    marker=MARKERS[int(g.filler_n.iloc[0])], ms=6, label=LABELS[c])
         ax.set_xscale("log")
         ax.set_yscale("log")
         ax.set_xlabel(xlabel)
-    lo = min(m.bits_delivered.min(), m.bits_stored[m.bits_stored > 0].min()) * 0.8
-    hi = m.bits_delivered.max() * 1.3
-    axes[1].plot([lo, hi], [lo, hi], color="#8a8a85", ls="--", lw=1.5)
-    axes[1].text(hi, hi, "every delivered bit stored", color="#55554f", ha="right", va="bottom",
-                 fontsize=12, rotation=0)
+        ax.set_ylim(ymin, ymax)
+    # identity line y = x on the bits panel, labelled inside the axes
+    xlo, xhi = m.bits_delivered.min() * 0.7, m.bits_delivered.max() * 1.4
+    axes[1].set_xlim(xlo, xhi)
+    axes[1].plot([xlo, xhi], [xlo, xhi], color="#8a8a85", ls="--", lw=1.5, zorder=1)
+    xt = np.sqrt(ymin * ymax) * 2
+    axes[1].annotate("every delivered bit stored", xy=(xt, xt), xytext=(xt * 0.9, xt * 1.8),
+                     color="#55554f", fontsize=12, ha="right", va="bottom",
+                     arrowprops=dict(arrowstyle="-", color="#8a8a85", lw=1))
     axes[0].set_ylabel("Bits of knowledge the model stored")
-    axes[0].legend(loc="upper left", frameon=False, fontsize=11)
-    axes[0].set_title("Plotted against tokens: curves disagree", fontsize=14)
-    axes[1].set_title("Plotted against delivered bits: curves collapse", fontsize=14)
-    ymin = max(1.0, m.bits_stored[m.bits_stored > 0].min() * 0.5)
-    axes[0].set_ylim(ymin, m.bits_stored.max() * 2)
-    fig.tight_layout()
+    axes[0].set_title("x = training tokens", fontsize=15)
+    axes[1].set_title("x = bits delivered", fontsize=15)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="lower center", ncol=2, frameon=False, fontsize=13,
+               bbox_to_anchor=(0.5, -0.02))
+    fig.text(0.5, 0.955, "Thin lines: individual seeds. Thick: seed mean.", ha="center",
+             fontsize=12, color="#55554f")
+    fig.tight_layout(rect=(0, 0.12, 1, 0.95))
     save(fig, "fig1_collapse")
 
 
@@ -173,6 +181,8 @@ def main():
         "n0": h2["n0"], "n0_points_used": h2["n0_points_used"],
         "n0_points_dropped_nonpositive": h2["n0_points_dropped"],
         "ieff_spreads": h2["ieff_spreads"].to_dict("records"),
+        "n0_excl_eq4_diagnostic": h2["n0_excl_eq4"],
+        "ieff_spreads_excl_eq4_diagnostic": h2["ieff_spreads_excl_eq4"].to_dict("records"),
         "token_shift": shift.to_dict("records"),
         "identity_ratio": last.to_dict("records"),
         "unseen_top1_acc_by_corpus": ctrl.to_dict("index"),
