@@ -7,3 +7,11 @@ logs/*.out
 *.pt
 *.npz
 .pytest_cache/
+logs/**/*.log
+logs/v4_archive*/
+logs/v4_invalid_evaluator/
+logs/v4_restart2/
+results/v4_archive*/
+results/*_invalid_evaluator/
+results/smoke/
+scratch/
