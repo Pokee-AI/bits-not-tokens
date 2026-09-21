@@ -1,0 +1,14 @@
+U10000 1 --model S --probe-every 1000 --results-subdir v3_phaseA --tag S
+U30000 1 --model S --probe-every 1000 --results-subdir v3_phaseA --tag S
+U10000 1 --model M --probe-every 1000 --results-subdir v3_phaseA --tag M
+U30000 1 --model M --probe-every 1000 --results-subdir v3_phaseA --tag M
+U10000 1 --model L --probe-every 1000 --results-subdir v3_phaseA --tag L
+U30000 1 --model L --probe-every 1000 --results-subdir v3_phaseA --tag L
+U100000 1 --model L --probe-every 1000 --results-subdir v3_phaseA --tag L
+U10000 2 --model S --probe-every 1000 --results-subdir v3_phaseA --tag S
+U30000 2 --model S --probe-every 1000 --results-subdir v3_phaseA --tag S
+U10000 2 --model M --probe-every 1000 --results-subdir v3_phaseA --tag M
+U30000 2 --model M --probe-every 1000 --results-subdir v3_phaseA --tag M
+U10000 2 --model L --probe-every 1000 --results-subdir v3_phaseA --tag L
+U30000 2 --model L --probe-every 1000 --results-subdir v3_phaseA --tag L
+U100000 2 --model L --probe-every 1000 --results-subdir v3_phaseA --tag L

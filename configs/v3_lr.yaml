@@ -1,0 +1,4 @@
+# frozen after the v3 LR sweep (results/v3_lr_sweep.csv): most facts stored on U30000, 1M docs, seed 1
+M: 0.0003
+S: 0.003
+L: 3.0e-4   # v1 frozen value (configs/common.yaml)
