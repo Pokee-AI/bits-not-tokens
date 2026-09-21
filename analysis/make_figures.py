@@ -13,9 +13,9 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from analysis import collapse, fit_beta  # noqa: E402
-from analysis.common import (COLORS, CORPORA, LABELS, MARKERS, PREDICTED_BETA, ROOT,  # noqa: E402
-                             load_runs, loglog_first_crossing, seed_mean, style)
+from analysis import absorption, collapse, fit_beta  # noqa: E402
+from analysis.common import (ALL_CORPORA, COLORS, CORPORA, HELDOUT, LABELS, MARKERS,  # noqa: E402
+                             PREDICTED_BETA, ROOT, load_runs, loglog_first_crossing, seed_mean, style)
 
 FIG = os.path.join(ROOT, "figures")
 
@@ -34,7 +34,7 @@ def fig1_collapse(df: pd.DataFrame):
     ymin, ymax = pos.bits_stored.min() * 0.5, pos.bits_stored.max() * 2.5
     for ax, xcol, xlabel in zip(axes, ["train_tokens", "bits_delivered"],
                                 ["Training tokens", "Bits of knowledge delivered by the data"]):
-        for c in CORPORA:
+        for c in ALL_CORPORA:
             g = df[df.corpus == c]
             if g.empty:
                 continue
@@ -64,8 +64,67 @@ def fig1_collapse(df: pd.DataFrame):
                bbox_to_anchor=(0.5, -0.02))
     fig.text(0.5, 0.955, "Thin lines: individual seeds. Thick: seed mean.", ha="center",
              fontsize=12, color="#55554f")
-    fig.tight_layout(rect=(0, 0.12, 1, 0.95))
+    fig.tight_layout(rect=(0, 0.16, 1, 0.95))
     save(fig, "fig1_collapse")
+
+
+def fig_ieff_v2(ie: pd.DataFrame, n0: float, band=None):
+    """v2 headline: bits stored vs I_eff with the frozen n0, all corpora incl. held-out."""
+    fig, ax = plt.subplots(figsize=(9, 7))
+    pos = ie[ie.bits_stored > 0]
+    ymin, ymax = pos.bits_stored.min() * 0.5, pos.bits_stored.max() * 2.5
+    for c in ALL_CORPORA:
+        g = ie[ie.corpus == c]
+        if g.empty:
+            continue
+        for _, s in g.groupby("seed"):
+            s = s.sort_values("docs")
+            ax.plot(s.i_eff, s.bits_stored.clip(lower=ymin), color=COLORS[c], lw=0.8, alpha=0.45)
+        gm = g.groupby("docs", as_index=False)[["i_eff", "bits_stored"]].mean().sort_values("docs")
+        n = int(c.split("_n")[1])
+        ax.plot(gm.i_eff, gm.bits_stored.clip(lower=ymin), color=COLORS[c], lw=2.2,
+                marker=MARKERS.get(n, "^"), ms=5, label=LABELS[c], ls="-" if c in CORPORA else "--")
+    lo, hi = ie.i_eff.min() * 0.7, ie.i_eff.max() * 1.4
+    ax.plot([lo, hi], [lo, hi], color="#8a8a85", ls=":", lw=1.5)
+    if band:
+        ax.axvspan(band[0], band[1], color="#e6e6e3", alpha=0.6, zorder=0)
+        ax.axhline(300 * 12, color="#8a8a85", lw=1, ls="-.")
+        ax.text(band[0], ymax * 0.7, "H2v2 band at T = 300", fontsize=10, color="#55554f")
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_xlim(lo, hi)
+    ax.set_ylim(ymin, ymax)
+    ax.set_xlabel(f"Exposure-corrected bits I_eff = 12 Σ(1 − e^(−n_k/{n0:.2f}))  (n0 frozen)")
+    ax.set_ylabel("Bits of knowledge the model stored")
+    ax.legend(frameon=False, fontsize=10, loc="upper left")
+    ax.set_title("Solid: v1 corpora (n0 fitted on the Zipf ones). Dashed: held-out.", fontsize=12)
+    fig.tight_layout()
+    save(fig, "fig_ieff_v2")
+
+
+def fig3_absorption(ab: pd.DataFrame):
+    """Fraction of delivered facts stored vs exposure count, per corpus (last point, seed mean)."""
+    fig, ax = plt.subplots(figsize=(9, 6.5))
+    bins = [b for b in ab["bin"].unique()]
+    xpos = {b: i for i, b in enumerate(bins)}
+    for c in ALL_CORPORA:
+        g = ab[ab.corpus == c]
+        if g.empty:
+            continue
+        gm = g.groupby("bin", sort=False).agg(frac=("frac_stored", "mean"), n=("n_facts", "mean")).reset_index()
+        gm = gm[gm.n >= 50]  # bins with fewer than 50 facts are too noisy to show
+        n = int(c.split("_n")[1])
+        ax.plot([xpos[b] for b in gm["bin"]], gm.frac.clip(lower=0), color=COLORS[c], lw=2,
+                marker=MARKERS.get(n, "^"), ms=6, label=LABELS[c], ls="-" if c in CORPORA else "--")
+    ax.set_xticks(range(len(bins)))
+    ax.set_xticklabels(bins)
+    ax.set_xlabel("Exposures of the fact during training (n_k)")
+    ax.set_ylabel("Fraction of delivered facts stored (top-1, chance-corrected)")
+    ax.set_ylim(-0.02, 1.02)
+    ax.legend(frameon=False, fontsize=10, loc="upper left")
+    ax.set_title("At each run's final measurement point; bins with < 50 facts omitted", fontsize=11)
+    fig.tight_layout()
+    save(fig, "fig3_absorption")
 
 
 def fig2_beta(fits: pd.DataFrame):
@@ -164,6 +223,19 @@ def main():
     fig2_beta(fits)
     fig_supp_loss(df)
     fig_supp_ieff(h2["ieff"], h2["n0"])
+    # ---- v2: frozen n0, held-out corpora, absorption curve (PASS_CRITERIA_v2.md)
+    nk = collapse.load_nk(df)
+    v2 = collapse.h2v2(df, nk)
+    v2["crossings"].to_csv(os.path.join(ROOT, "results", "h2v2_crossings.csv"), index=False)
+    v2["spreads"].to_csv(os.path.join(ROOT, "results", "h2v2_spreads.csv"), index=False)
+    fig_ieff_v2(v2["ieff"], v2["n0"], v2["verdict"].get("band"))
+    ab = absorption.compute()
+    if not ab.empty:
+        fig3_absorption(ab)
+    det = collapse.determinism_check(df)
+    det.to_csv(os.path.join(ROOT, "results", "determinism_check.csv"), index=False)
+    # exploratory only: refit n0 with the held-out corpora included (never used for the verdict)
+    n0_explore, _, _, _ = collapse.fit_n0(df, nk, exclude=("EQ4_n16",))
     shift = token_shift(df)
     shift.to_csv(os.path.join(ROOT, "results", "token_shift.csv"), index=False)
     last = df.sort_values("docs").groupby(["corpus", "seed"]).tail(1)
@@ -187,6 +259,13 @@ def main():
         "identity_ratio": last.to_dict("records"),
         "unseen_top1_acc_by_corpus": ctrl.to_dict("index"),
         "chance": 1 / 4096,
+        "v2": {"n0_frozen": v2["n0"], "spreads": v2["spreads"].to_dict("records"),
+               "crossings": v2["crossings"].to_dict("records"), "verdict": v2["verdict"],
+               "n0_refit_incl_heldout_EXPLORATORY": n0_explore,
+               "determinism_check": det.to_dict("records"),
+               "absorption_last_point_seed_mean": (ab.groupby(["corpus", "bin"], sort=False)
+                                                   .frac_stored.mean().unstack("bin").to_dict("index")
+                                                   if not ab.empty else {})},
     }
     json.dump(summary, open(os.path.join(ROOT, "results", "summary.json"), "w"), indent=1,
               default=lambda o: None if (isinstance(o, float) and np.isnan(o)) else str(o))
