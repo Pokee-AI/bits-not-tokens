@@ -161,8 +161,8 @@ def main():
         is_probe = np.zeros(world.n_facts, dtype=bool)
         is_probe[probe_keys] = True
         np.save(os.path.join(art_dir, "probe_keys.npy"), probe_keys)
-        probe_path = os.path.join(art_dir, "probe_retention.csv")
-        open(probe_path, "w").write("docs,tokens,step,weights,probe_acc\n")
+        retention_path = os.path.join(art_dir, "probe_retention.csv")
+        open(retention_path, "w").write("docs,tokens,step,weights,probe_acc\n")
         next_probe_docs = [int(probe_cfg["probe_window_hi"])]
     else:
         stream = (make_stream_v3(world, corpus, args.seed, args.cap, args.warmup_docs) if v3
@@ -240,7 +240,7 @@ def main():
                 break
             if args.v5 and stream.docs_seen >= next_probe_docs[0]:
                 acc = evaluator.probe_accuracy(model, probe_keys)
-                open(probe_path, "a").write(f"{stream.docs_seen},{stream.tokens_seen},{step},main,{acc:.5f}\n")
+                open(retention_path, "a").write(f"{stream.docs_seen},{stream.tokens_seen},{step},main,{acc:.5f}\n")
                 next_probe_docs[0] += int(probe_cfg["probe_measure_every"])
             if args.probe_every and step % args.probe_every == 0:
                 pl = evaluator.probe_loss(model)
@@ -285,7 +285,7 @@ def main():
         probe_main = ""
         if args.v5 and not args.no_cooldown:
             probe_main = evaluator.probe_accuracy(model, probe_keys)  # main-run weights at snapshot time
-            open(probe_path, "a").write(f"{stream.docs_seen},{stream.tokens_seen},{step},main_at_snapshot,{probe_main:.5f}\n")
+            open(retention_path, "a").write(f"{stream.docs_seen},{stream.tokens_seen},{step},main_at_snapshot,{probe_main:.5f}\n")
         if not args.no_cooldown and not exhausted[0]:
             snap = snapshot()
             if unit == "docs":
@@ -313,8 +313,8 @@ def main():
             np.savez_compressed(os.path.join(art_dir, f"seen_{D}.npz"), first_seen=stream.first_seen,
                                 last_seen=stream.last_seen)
             probe_branch = evaluator.probe_accuracy(model, probe_keys)
-            open(probe_path, "a").write(f"{D},{stream.tokens_seen},{step},"
-                                        f"{'main' if args.no_cooldown else 'branch'},{probe_branch:.5f}\n")
+            open(retention_path, "a").write(f"{D},{stream.tokens_seen},{step},"
+                                            f"{'main' if args.no_cooldown else 'branch'},{probe_branch:.5f}\n")
         # per-fact top-1 hits and NLL (bits, fp16) over all K facts; undelivered facts are 0
         np.savez_compressed(os.path.join(art_dir, f"hits_{D}.npz"),
                             hit=np.packbits(ev["_hit"]), nll_bits=ev["_nll"].astype(np.float16))
