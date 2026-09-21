@@ -8,6 +8,6 @@ tag=""; prev=""
 for a in "$@"; do [[ $prev == "--tag" ]] && tag="_$a"; prev=$a; done
 log="$ROOT/logs/${corpus}_seed${seed}${tag}.log"
 cd "$ROOT"
-CUDA_VISIBLE_DEVICES=$gpu nohup .venv/bin/python train/train.py --corpus "configs/${corpus}.yaml" \
+CUDA_VISIBLE_DEVICES=$gpu nohup .venv/bin/python train/train.py --corpus "$( [ -f "configs/${corpus}.yaml" ] && echo "configs/${corpus}.yaml" || echo "configs/v3/${corpus}.yaml" )" \
   --seed "$seed" "$@" > "$log" 2>&1 &
 echo "gpu $gpu -> $corpus seed $seed $* (pid $!, log $log)"
