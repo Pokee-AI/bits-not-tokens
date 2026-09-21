@@ -65,8 +65,6 @@ def fig_headroom(fin: pd.DataFrame):
         if g.empty:
             continue
         ax.plot(g.n, g.bpp, color=CCOL[c], marker="o", ms=7, lw=2, label=CLAB[c])
-        for _, r in g.iterrows():
-            pass
     for y, lab in [(2.0, "2.0 bits/param (Allen-Zhu & Li 2024)"), (3.6, "3.6 bits/param (Morris et al. 2025)")]:
         ax.axhline(y, color="#8a8a85", ls="--", lw=1.2)
         ax.text(m.n.min(), y * 1.05, lab, fontsize=9, color="#55554f")
@@ -123,6 +121,32 @@ def fig_waste(w: pd.DataFrame):
     save(fig, "v3_fig_waste")
 
 
+def fig_forgetting(fc: pd.DataFrame):
+    """Exploratory: retention at the end vs when the fact reached c* (capped runs, seed mean)."""
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5.2), sharey=True)
+    for ax, c in zip(axes, ["CAPPED", "CURATED"]):
+        for m in ["S", "M", "L"]:
+            g = fc[(fc.corpus == c) & (fc.model_size == m) & (fc.point != "below_cstar_at_end")]
+            if g.empty:
+                continue
+            gm = g.groupby("point").agg(tokens=("train_tokens", "mean"), ret=("retained_at_end", "mean"),
+                                        n=("facts_newly_capped", "mean")).reset_index()
+            gm = gm[gm.n >= 50]
+            ax.plot(gm.tokens, gm.ret, color=SCOL[m], marker="o", ms=6, lw=2, label=SLAB[m])
+            b = fc[(fc.corpus == c) & (fc.model_size == m) & (fc.point == "below_cstar_at_end")].retained_at_end.mean()
+            ax.scatter([gm.tokens.max() * 1.6], [b], color=SCOL[m], marker="*", s=140, zorder=4)
+        ax.set_xscale("log")
+        ax.set_xlabel("Training tokens at which the fact reached c*")
+        ax.set_title(f"{CLAB[c]}", fontsize=13)
+        ax.set_ylim(-0.02, 1.02)
+    axes[0].set_ylabel("Fraction of those facts stored at the END of training")
+    axes[0].legend(frameon=False, fontsize=10, loc="upper left")
+    fig.text(0.5, 0.005, "Stars: facts still below c* at the end (currently being learned). Exploratory diagnostic.",
+             ha="center", fontsize=10, color="#55554f")
+    fig.tight_layout(rect=(0, 0.03, 1, 1))
+    save(fig, "v3_fig_forgetting_EXPLORATORY")
+
+
 def main():
     style()
     os.makedirs(FIG, exist_ok=True)
@@ -149,6 +173,7 @@ def main():
         r = v3_premise.evaluate(df)
         fig_premise(df)
         fig_headroom(r["final"])
+        fig_forgetting(r["forgetting_curve_EXPLORATORY"])
         out["phaseP"] = {k: (v.reset_index().to_dict("records") if isinstance(v, pd.DataFrame) else v)
                          for k, v in r.items() if k != "final"}
     json.dump(out, open(os.path.join(ROOT, "results", "v3_summary.json"), "w"), indent=1, default=str)

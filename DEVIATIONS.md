@@ -57,3 +57,32 @@ None of these changed after the real runs were launched.
 12. **Reruns of the v1 corpora** (`--tag rerun`, same seeds) exist only to obtain per-fact
     hits for the absorption curve. v1 CSVs remain the record; `load_runs` ignores tagged
     CSVs, and `analysis/collapse.determinism_check` reports v1-vs-rerun differences.
+
+## v3 notes (Experiment Brief v3; PASS_CRITERIA_v3.md, C_STAR.md)
+
+13. **Phase 0 uses `results/absorption.csv` and the rerun artifacts**, not model checkpoints
+    (none exist; the reruns are bit-identical to v1). Agreed before Phase 0.
+14. **Token-defined measurement points land on a batch boundary** (≥ target, within one
+    batch, ≈ 3,600 tokens at n = 16 and ≈ 1,550 at n = 0); the cooldown branch runs until
+    the target is reached. Warm-up W is likewise rounded up to a batch boundary. Artifacts
+    are keyed by document count.
+15. **RAW runs are launched with `--cap c* --warmup-docs W`** purely so that
+    `facts_with_at_least_cstar_exposures` and cap adequacy are logged for RAW too; the
+    shifted-Zipf stream ignores both (verified: RAW docs/tokens identical across the three
+    corpora's uncapped prefix, and `n_uncapped` stays 1,000,000).
+16. **Phase A measurement points are the v1 document points** (12, log-spaced 30K–10M), so
+    c50/c90 on the fraction-stored-vs-mean-exposures curve are interpolated between
+    coarse points (ratio 1.7×); c* rounds up to a multiple of 10, which absorbs that.
+17. **The plateau probe** evaluates the first 20,000 in-distribution documents every 1,000
+    steps (not the full 200,000) to keep Phase A cheap; plateau end = first probe < 11.5 bits.
+18. **"Never left the plateau"** is evaluated as in-distribution loss > 11.5 bits at every
+    measurement point (an earlier draft used the final point only, which mis-flags the
+    capped runs whose *final* loss exceeds 11.5 because of forgetting).
+19. **Forgetting curve** (`results/v3_forgetting_EXPLORATORY.csv`, figure of the same name)
+    is an exploratory diagnostic added after the Phase P results, computed from the saved
+    n_k / hits arrays; it plays no part in P1, P2 or cap adequacy.
+20. **Environment:** the local workstation was re-provisioned during Phase P (its `/mnt`
+    was wiped); the repository was restored from the GPU server's copy (identical commit
+    `5a73466`), and the Phase P runs, which live on the server, were unaffected.
+21. **Optional §8 diagnostic not run**; no `--save-final` rerun was made (per instruction:
+    only if the diagnostic runs).
