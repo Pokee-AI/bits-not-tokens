@@ -27,7 +27,7 @@ class Evaluator:
         K = world.n_facts
         # 1. In-distribution keys from the corpus's own fact distribution (uniform for EQ).
         kind = corpus["sampling"]
-        if kind in ("zipf", "shifted_zipf", "capped"):
+        if kind in ("zipf", "shifted_zipf", "capped", "flat"):
             # in-distribution = the corpus's base fact distribution (the uncapped one for capped streams)
             p = (zipf_probs(K, float(corpus["zipf_a"])) if kind == "zipf"
                  else shifted_zipf_probs(K, float(corpus["zipf_a"]), float(corpus["zipf_q"])))

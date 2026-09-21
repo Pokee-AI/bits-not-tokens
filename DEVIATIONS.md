@@ -105,3 +105,12 @@ None of these changed after the real runs were launched.
     drawn entirely from p), as in v3.
 27. **The absorption curve for predictions pools both v3 RAW seeds** (the brief says seed
     mean; pooling per-fact hits is the same estimator with fewer empty bins).
+28. **Evaluator bug caught 25 % into the v4 queue and the queue restarted.** The in-distribution
+    eval set was drawn from p only for `zipf` / `shifted_zipf` / `capped` corpora; for the new
+    `flat` corpora it fell through to uniform-over-all-facts, so `obj_loss_bits_indist` and
+    `weighted_acc_p` (the P3 guard) were mis-measured on the first 12 v4 runs (`facts_stored`,
+    `head_loss_bits`, hits and the control were unaffected; training is independent of the
+    eval set). Fixed (`eval/evaluate.py`), all running v4 jobs stopped, their outputs moved to
+    `results/v4_runs_invalid_evaluator/` and `artifacts/v4_invalid_evaluator/`, and the full
+    54-run queue relaunched from scratch under the fixed code. Runs are deterministic, so the
+    relaunch reproduces the same training; no run, seed or level was dropped.
