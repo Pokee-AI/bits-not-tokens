@@ -118,3 +118,9 @@ None of these changed after the real runs were launched.
     predate these columns and P3 needs RAW's `weighted_acc_p` per size and seed). Training is
     deterministic (checked on RAW-S seed 1, deviation 22), so all pre-existing columns are
     identical; the analysis asserts equality with the v3 rows before using the rerun.
+30. **v4 queue restarted a second time (08:15 UTC).** The rsync-based code push used
+    `--delete` scoped to the repository and removed `results/v4_runs/` on the server (28
+    finished-run CSVs) because the local copy had not pulled them; artifacts and logs were
+    unaffected. Runs are deterministic, so the full queue (54 + 6 RAW reruns) was relaunched
+    under unchanged code; `scripts/sync_remote.sh` now pushes via `git push` (which never
+    touches untracked files) and `scripts/pull_results.sh` pulls results additively.
