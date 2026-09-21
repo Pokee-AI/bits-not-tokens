@@ -12,7 +12,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from synth.information import zipf_probs
+from synth.information import shifted_zipf_probs, zipf_probs
 from synth.world import OBJ_BITS, World
 
 LN2 = math.log(2.0)
@@ -26,10 +26,16 @@ class Evaluator:
         rng = np.random.default_rng(eval_seed)
         K = world.n_facts
         # 1. In-distribution keys from the corpus's own fact distribution (uniform for EQ).
-        if corpus["sampling"] == "zipf":
-            cdf = np.cumsum(zipf_probs(K, float(corpus["zipf_a"])))
+        kind = corpus["sampling"]
+        if kind in ("zipf", "shifted_zipf", "capped"):
+            # in-distribution = the corpus's base fact distribution (the uncapped one for capped streams)
+            p = (zipf_probs(K, float(corpus["zipf_a"])) if kind == "zipf"
+                 else shifted_zipf_probs(K, float(corpus["zipf_a"]), float(corpus["zipf_q"])))
+            cdf = np.cumsum(p)
             ranks = np.minimum(np.searchsorted(cdf, rng.random(n_indist), side="right"), K - 1)
             self.indist_keys = world.rank_to_key[ranks].astype(np.int64)
+        elif kind == "uniform_subset":
+            self.indist_keys = world.rank_to_key[rng.integers(0, int(corpus["k_sub"]), size=n_indist)].astype(np.int64)
         else:
             self.indist_keys = rng.integers(0, K, size=n_indist, dtype=np.int64)
         self.indist_templ = rng.integers(0, world.n_templates, size=n_indist)
@@ -61,6 +67,14 @@ class Evaluator:
             nll_f[i:i + self.batch] = (full / LN2).cpu().numpy()
             hit[i:i + self.batch] = hit_b.cpu().numpy()
         return nll_r, nll_f, hit
+
+    @torch.no_grad()
+    def probe_loss(self, model, n: int = 20_000) -> float:
+        """Cheap in-distribution object loss (bits) on the first n in-distribution documents."""
+        model.eval()
+        nll, _, _ = self._object_scores(model, self.indist_keys[:n], self.indist_templ[:n])
+        model.train()
+        return float(nll.mean())
 
     def evaluate(self, model, n_k: np.ndarray) -> dict:
         model.eval()

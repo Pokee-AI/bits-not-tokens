@@ -41,3 +41,17 @@ def i_eff(n_k: np.ndarray, n0: float) -> float:
     """Exposure-corrected information axis: 12 * sum_k (1 - exp(-n_k / n0))."""
     nk = n_k[n_k > 0].astype(np.float64)
     return OBJ_BITS * float(np.sum(-np.expm1(-nk / n0)))
+
+
+def shifted_zipf_probs(n_facts: int, a: float, q: float) -> np.ndarray:
+    """p_k proportional to (k + q)^-(1+a) over ranks k = 1..K (v3 base distribution)."""
+    k = np.arange(1, n_facts + 1, dtype=np.float64)
+    p = (k + q) ** (-(1.0 + a))
+    return p / p.sum()
+
+
+def expected_facts_with_at_least(p: np.ndarray, n_docs: int, c: int) -> float:
+    """sum_k P(Binomial(N, p_k) >= c), Poisson approximation (N p_k small for all but the head)."""
+    from scipy.stats import poisson
+    lam = n_docs * p
+    return float(np.sum(poisson.sf(c - 1, lam)))

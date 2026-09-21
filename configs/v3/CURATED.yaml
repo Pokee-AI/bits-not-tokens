@@ -1,0 +1,7 @@
+name: CURATED
+sampling: capped
+zipf_a: 0.5
+zipf_q: 1000
+filler_n: 0
+block: 50000
+max_docs: 100000000

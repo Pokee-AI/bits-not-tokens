@@ -1,0 +1,7 @@
+name: CAPPED
+sampling: capped       # caps repetitions per fact after warm-up; does not deduplicate documents
+zipf_a: 0.5
+zipf_q: 1000
+filler_n: 16
+block: 50000
+max_docs: 100000000

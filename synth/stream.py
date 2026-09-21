@@ -110,3 +110,117 @@ def make_stream(world: World, corpus: dict, run_seed: int) -> DocStream:
     if corpus["sampling"] == "eq":
         return EqStream(world, int(corpus["repeats"]), int(corpus["filler_n"]), run_seed)
     raise ValueError(corpus["sampling"])
+
+
+# ----------------------------------------------------------------------------------------
+# v3 streams (Experiment Brief v3)
+class ProbStream(DocStream):
+    """Facts sampled i.i.d. from an arbitrary probability vector over popularity ranks."""
+
+    def __init__(self, world: World, p: np.ndarray, filler_n: int, run_seed: int):
+        super().__init__(world, filler_n, run_seed)
+        self.p = np.asarray(p, dtype=np.float64)
+        self.cdf = np.cumsum(self.p)
+        self.cdf[-1] = 1.0
+
+    def _draw_ranks(self, n: int) -> np.ndarray:
+        u = self.rng.random(n)
+        return np.minimum(np.searchsorted(self.cdf, u, side="right"), self.world.n_facts - 1)
+
+    def _draw_keys(self, n: int) -> np.ndarray:
+        return self.world.rank_to_key[self._draw_ranks(n)].astype(np.int64)
+
+
+class UniformSubsetStream(DocStream):
+    """Uniform (with replacement) over the first k_sub facts of the popularity permutation."""
+
+    def __init__(self, world: World, k_sub: int, filler_n: int, run_seed: int):
+        super().__init__(world, filler_n, run_seed)
+        self.k_sub = int(k_sub)
+        self.subset_keys = world.rank_to_key[: self.k_sub].astype(np.int64)
+
+    def _draw_keys(self, n: int) -> np.ndarray:
+        return self.subset_keys[self.rng.integers(0, self.k_sub, size=n)]
+
+
+class CappedStream(ProbStream):
+    """Shifted-Zipf stream with a per-fact repetition cap (v3 CAPPED / CURATED).
+
+    The first `warmup_docs` documents are drawn uncapped. Afterwards the sampling CDF is
+    rebuilt over facts with n_k < cap every `block` documents, and within a block any draw
+    that would exceed the cap is rejected and redrawn. Raises StopIteration when no fact
+    is left below the cap.
+    """
+
+    def __init__(self, world: World, p: np.ndarray, cap: int, warmup_docs: int, filler_n: int,
+                 run_seed: int, block: int = 50_000):
+        super().__init__(world, p, filler_n, run_seed)
+        self.cap, self.warmup_docs, self.block = int(cap), int(warmup_docs), int(block)
+        self.base_cdf = self.cdf.copy()
+        self.block_id = -1  # id of the block the current cdf was built for; -1 = warm-up cdf
+        self.n_uncapped = world.n_facts
+
+    def _current_block(self) -> int:
+        return -1 if self.docs_seen < self.warmup_docs else (self.docs_seen - self.warmup_docs) // self.block
+
+    def _rebuild(self, block_id: int) -> None:
+        if block_id < 0:
+            self.cdf = self.base_cdf
+        else:
+            # n_k is indexed by key; p by rank -> mask ranks whose key is capped
+            open_ = self.n_k[self.world.rank_to_key] < self.cap
+            self.n_uncapped = int(open_.sum())
+            if self.n_uncapped == 0:
+                raise StopIteration("every fact reached the cap")
+            p = np.where(open_, self.p, 0.0)
+            self.cdf = np.cumsum(p / p.sum())
+            self.cdf[-1] = 1.0
+        self.block_id = block_id
+
+    def _draw_keys(self, n: int) -> np.ndarray:
+        b = self._current_block()
+        if b != self.block_id:
+            self._rebuild(b)
+        if b < 0:
+            return super()._draw_keys(n)
+        out = np.empty(n, dtype=np.int64)
+        got = 0
+        pending: dict[int, int] = {}  # key -> draws accepted in this batch (not yet in n_k)
+        while got < n:
+            cand = super()._draw_keys(n - got)
+            for k in cand:
+                k = int(k)
+                if self.n_k[k] + pending.get(k, 0) < self.cap:
+                    out[got] = k
+                    got += 1
+                    pending[k] = pending.get(k, 0) + 1
+        return out
+
+    def snapshot(self) -> dict:
+        s = super().snapshot()
+        s["cdf"] = self.cdf.copy()
+        s["block_id"] = self.block_id
+        s["n_uncapped"] = self.n_uncapped
+        return s
+
+    def restore(self, snap: dict) -> None:
+        super().restore(snap)
+        self.cdf = snap["cdf"].copy()
+        self.block_id = snap["block_id"]
+        self.n_uncapped = snap["n_uncapped"]
+
+
+def make_stream_v3(world: World, corpus: dict, run_seed: int, cap: int | None = None,
+                   warmup_docs: int | None = None) -> DocStream:
+    from synth.information import shifted_zipf_probs
+    kind = corpus["sampling"]
+    if kind == "uniform_subset":
+        return UniformSubsetStream(world, int(corpus["k_sub"]), int(corpus["filler_n"]), run_seed)
+    p = shifted_zipf_probs(world.n_facts, float(corpus["zipf_a"]), float(corpus["zipf_q"]))
+    if kind == "shifted_zipf":
+        return ProbStream(world, p, int(corpus["filler_n"]), run_seed)
+    if kind == "capped":
+        assert cap is not None and warmup_docs is not None, "capped stream needs c* and W"
+        return CappedStream(world, p, cap, warmup_docs, int(corpus["filler_n"]), run_seed,
+                            int(corpus.get("block", 50_000)))
+    return make_stream(world, corpus, run_seed)

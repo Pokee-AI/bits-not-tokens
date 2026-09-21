@@ -1,0 +1,6 @@
+name: RAW
+sampling: shifted_zipf
+zipf_a: 0.5
+zipf_q: 1000
+filler_n: 16
+max_docs: 100000000   # not used: Phase P runs stop at --budget-tokens
