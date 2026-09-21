@@ -226,7 +226,7 @@ def main():
                 w.writeheader()
             w.writerow({k: row.get(k, "") for k in CSV_COLS})
 
-    for D in points:
+    for pi, D in enumerate(points):
         if unit == "docs":
             branch_from = D - int(round(cfg["cooldown_fraction"] * D / batch)) * batch
         else:
@@ -241,17 +241,19 @@ def main():
                 n_branch = max(1, int(round((D - stream.tokens_seen) / (stream.tokens_seen / max(step, 1)))))
             lr0 = main_lr(step)
             last = None
-            for t in range(n_branch):
+            t = 0
+            while (t < n_branch) if unit == "docs" else (progress() < D):
                 try:
-                    last = train_step(lr0 * (1.0 - t / n_branch))
+                    last = train_step(lr0 * (1.0 - min(t, n_branch - 1) / n_branch))
                 except StopIteration:
                     exhausted[0] = True
                     break
+                t += 1
             if unit == "docs" and not exhausted[0]:
                 assert stream.docs_seen == D, (stream.docs_seen, D)
             if last is not None:
                 loss_main = float(last.item())
-        D = progress()  # actual position (tokens: within one batch of the target)
+        D = stream.docs_seen  # artifacts are keyed by documents (tokens: within one batch of target)
         ev = evaluator.evaluate(model, stream.n_k)
         np.savez_compressed(os.path.join(art_dir, f"nk_{D}.npz"), n_k=stream.n_k)
         # per-fact top-1 hits and NLL (bits, fp16) over all K facts; undelivered facts are 0
@@ -284,7 +286,7 @@ def main():
               f"ideal {row['ideal_loss_bits']:.3f} stored {ev['facts_stored']:.0f} "
               f"soft {ev['bits_stored_soft']:.0f} unseen_acc {ev['unseen_top1_acc']:.2e} "
               f"wall {row['wall_seconds']:.0f}s", flush=True)
-        if exhausted[0] or D >= points[-1]:
+        if exhausted[0] or pi == len(points) - 1:
             break  # the main run's last 10% is never evaluated
         if not args.no_cooldown:
             restore(snap)
