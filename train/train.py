@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import math
 import csv
 import hashlib
 import json
@@ -24,7 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from eval.evaluate import Evaluator  # noqa: E402
 from synth.information import ideal_loss_bits_eq, ideal_loss_bits_zipf, zipf_probs  # noqa: E402
-from synth.stream import make_stream, make_stream_v3  # noqa: E402
+from synth.stream import make_stream, make_stream_v3, make_stream_v5, probe_keys_for  # noqa: E402
 from synth.world import World  # noqa: E402
 from train.model import GPT, lm_loss  # noqa: E402
 
@@ -43,6 +44,8 @@ CSV_COLS = [
     "n_uncapped",
     # v4 extras
     "corpus_type", "level", "tau", "n_facts_at_cap", "weighted_acc_p", "head_loss_bits",
+    # v5 extras
+    "setting", "weight_decay", "schedule", "mid_schedule", "probe_acc_branch", "probe_acc_main_at_snapshot",
 ]
 
 
@@ -98,6 +101,13 @@ def main():
     ap.add_argument("--corpus-type", default="", help="v4: RAW | FLAT | CURATED")
     ap.add_argument("--stop-after-points", type=int, default=None,
                     help="stop after this many measurement points (determinism checks)")
+    # v5 options (Experiment Brief v5.1)
+    ap.add_argument("--v5", action="store_true", help="v5: attach the retention probe (configs/v5.yaml)")
+    ap.add_argument("--probe-config", default="configs/v5.yaml", help="probe config (smoke tests use a small one)")
+    ap.add_argument("--wd", type=float, default=None, help="override weight decay (v5 optimizer ablation)")
+    ap.add_argument("--schedule", default="constant", choices=["constant", "cosine"],
+                    help="cosine: 100-step warmup then cosine to 10%% of peak at --budget-tokens; no cooldown branches")
+    ap.add_argument("--setting", default="", help="v5 optimizer-setting label (base/wd0/lr3/wd0_lr3/cosine)")
     args = ap.parse_args()
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -113,6 +123,11 @@ def main():
             cfg["lr"] = yaml.safe_load(open(lr_file)).get(args.model, cfg["lr"])
     if args.lr is not None:
         cfg["lr"] = args.lr
+    if args.wd is not None:
+        cfg["weight_decay"] = args.wd
+    if args.schedule == "cosine":
+        args.no_cooldown = True  # cosine runs have no cooldown branches (brief v5.1 §4)
+    probe_cfg = yaml.safe_load(open(os.path.join(root, args.probe_config))) if args.v5 else None
     max_docs = args.max_docs or int(corpus["max_docs"])
     batch = int(cfg["batch_size"])
     max_docs = (max_docs // batch) * batch
@@ -125,6 +140,9 @@ def main():
                           "cap": args.cap, "warmup_docs": args.warmup_docs}
     if args.tau is not None:
         full_cfg["v4"] = {"tau": args.tau, "level": args.level, "corpus_type": args.corpus_type}
+    if args.v5:
+        full_cfg["v5"] = {"probe": probe_cfg, "setting": args.setting, "weight_decay": cfg["weight_decay"],
+                          "schedule": args.schedule}
     config_hash = hashlib.sha256(json.dumps(full_cfg, sort_keys=True).encode()).hexdigest()[:12]
     commit = git_commit()
     art_dir = os.path.join(root, "artifacts", run_name)
@@ -137,8 +155,19 @@ def main():
     torch.manual_seed(args.seed)
     world = World(cfg["world_seed"], cfg["n_subjects"], cfg["n_relations"], cfg["n_objects"],
                   cfg["n_templates"])
-    stream = (make_stream_v3(world, corpus, args.seed, args.cap, args.warmup_docs) if v3
-              else make_stream(world, corpus, args.seed))
+    if args.v5:
+        stream = make_stream_v5(world, corpus, args.seed, probe_cfg, args.warmup_docs)
+        probe_keys = probe_keys_for(world, probe_cfg)
+        is_probe = np.zeros(world.n_facts, dtype=bool)
+        is_probe[probe_keys] = True
+        np.save(os.path.join(art_dir, "probe_keys.npy"), probe_keys)
+        probe_path = os.path.join(art_dir, "probe_retention.csv")
+        open(probe_path, "w").write("docs,tokens,step,weights,probe_acc\n")
+        next_probe_docs = [int(probe_cfg["probe_window_hi"])]
+    else:
+        stream = (make_stream_v3(world, corpus, args.seed, args.cap, args.warmup_docs) if v3
+                  else make_stream(world, corpus, args.seed))
+        is_probe = None
     filler_n = int(corpus["filler_n"])
     doc_len = world.max_doc_len(filler_n)
     model = GPT(world.vocab.size, doc_len, msize["n_layers"], msize["d_model"], msize["n_heads"],
@@ -191,7 +220,11 @@ def main():
         return loss
 
     def main_lr(s: int) -> float:
-        return lr * min(1.0, (s + 1) / warmup)
+        w = lr * min(1.0, (s + 1) / warmup)
+        if args.schedule == "cosine":  # cosine in token space: exactly 10 % of peak at the budget
+            frac = min(1.0, stream.tokens_seen / args.budget_tokens)
+            return w * (0.1 + 0.9 * 0.5 * (1.0 + math.cos(math.pi * frac)))
+        return w
 
     exhausted = [False]
 
@@ -205,6 +238,10 @@ def main():
                 print(f"[{run_name}] stream exhausted at docs {stream.docs_seen} tokens {stream.tokens_seen}",
                       flush=True)
                 break
+            if args.v5 and stream.docs_seen >= next_probe_docs[0]:
+                acc = evaluator.probe_accuracy(model, probe_keys)
+                open(probe_path, "a").write(f"{stream.docs_seen},{stream.tokens_seen},{step},main,{acc:.5f}\n")
+                next_probe_docs[0] += int(probe_cfg["probe_measure_every"])
             if args.probe_every and step % args.probe_every == 0:
                 pl = evaluator.probe_loss(model)
                 open(probe_path, "a").write(f"{step},{stream.docs_seen},{stream.tokens_seen},{pl:.5f}\n")
@@ -245,6 +282,10 @@ def main():
             branch_from = int(round((1 - cfg["cooldown_fraction"]) * D))
         run_main_until(branch_from if not args.no_cooldown else D)
         loss_main = float(np.mean(recent[-4:])) if recent else float("nan")
+        probe_main = ""
+        if args.v5 and not args.no_cooldown:
+            probe_main = evaluator.probe_accuracy(model, probe_keys)  # main-run weights at snapshot time
+            open(probe_path, "a").write(f"{stream.docs_seen},{stream.tokens_seen},{step},main_at_snapshot,{probe_main:.5f}\n")
         if not args.no_cooldown and not exhausted[0]:
             snap = snapshot()
             if unit == "docs":
@@ -266,8 +307,14 @@ def main():
             if last is not None:
                 loss_main = float(last.item())
         D = stream.docs_seen  # artifacts are keyed by documents (tokens: within one batch of target)
-        ev = evaluator.evaluate(model, stream.n_k)
+        ev = evaluator.evaluate(model, stream.n_k, exclude=is_probe)
         np.savez_compressed(os.path.join(art_dir, f"nk_{D}.npz"), n_k=stream.n_k)
+        if args.v5:
+            np.savez_compressed(os.path.join(art_dir, f"seen_{D}.npz"), first_seen=stream.first_seen,
+                                last_seen=stream.last_seen)
+            probe_branch = evaluator.probe_accuracy(model, probe_keys)
+            open(probe_path, "a").write(f"{D},{stream.tokens_seen},{step},"
+                                        f"{'main' if args.no_cooldown else 'branch'},{probe_branch:.5f}\n")
         # per-fact top-1 hits and NLL (bits, fp16) over all K facts; undelivered facts are 0
         np.savez_compressed(os.path.join(art_dir, f"hits_{D}.npz"),
                             hit=np.packbits(ev["_hit"]), nll_bits=ev["_nll"].astype(np.float16))
@@ -278,6 +325,10 @@ def main():
                "cooldown": int(not args.no_cooldown), **ev}
         row.update({"corpus_type": args.corpus_type, "level": args.level, "tau": args.tau if args.tau is not None else "",
                     "n_facts_at_cap": getattr(stream, "n_at_cap", "")})
+        if args.v5:
+            row.update({"setting": args.setting, "weight_decay": cfg["weight_decay"], "schedule": args.schedule,
+                        "mid_schedule": int(args.schedule == "cosine" and pi < len(points) - 1),
+                        "probe_acc_branch": probe_branch, "probe_acc_main_at_snapshot": probe_main})
         row.update({"model_size": args.model, "n_params_nonemb": counts["non_embedding"],
                     "n_params_total": counts["total"],
                     "bits_stored_per_param": ev["bits_stored"] / counts["non_embedding"],

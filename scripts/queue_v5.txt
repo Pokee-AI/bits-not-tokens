@@ -1,0 +1,87 @@
+RAW 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag M_base
+FLAT 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base
+RAW 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag M_base
+FLAT 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base
+RAW 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --wd 0 --setting wd0 --tag M_wd0
+FLAT 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --wd 0 --setting wd0 --tag M_wd0
+RAW 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --wd 0 --setting wd0 --tag M_wd0
+FLAT 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --wd 0 --setting wd0 --tag M_wd0
+RAW 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --lr 0.0001 --setting lr3 --tag M_lr3
+FLAT 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --lr 0.0001 --setting lr3 --tag M_lr3
+RAW 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --lr 0.0001 --setting lr3 --tag M_lr3
+FLAT 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --lr 0.0001 --setting lr3 --tag M_lr3
+RAW 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --wd 0 --lr 0.0001 --setting wd0_lr3 --tag M_wd0_lr3
+FLAT 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --wd 0 --lr 0.0001 --setting wd0_lr3 --tag M_wd0_lr3
+RAW 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --wd 0 --lr 0.0001 --setting wd0_lr3 --tag M_wd0_lr3
+FLAT 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --wd 0 --lr 0.0001 --setting wd0_lr3 --tag M_wd0_lr3
+RAW 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --schedule cosine --setting cosine --tag M_cosine
+FLAT 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --schedule cosine --setting cosine --tag M_cosine
+RAW 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --schedule cosine --setting cosine --tag M_cosine
+FLAT 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --schedule cosine --setting cosine --tag M_cosine
+RAW 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 600000000 --setting base --tag M_base_2B
+FLAT 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 600000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base_2B
+RAW 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 600000000 --setting base --tag M_base_2B
+FLAT 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 600000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base_2B
+RAW 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 1200000000 --setting base --tag M_base_4B
+FLAT 1 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 1200000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base_4B
+RAW 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 1200000000 --setting base --tag M_base_4B
+FLAT 2 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 1200000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base_4B
+RAW 1 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag S_base
+FLAT 1 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --setting base --tag S_base
+RAW 2 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag S_base
+FLAT 2 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --setting base --tag S_base
+RAW 1 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --wd 0 --setting wd0 --tag S_wd0
+FLAT 1 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --wd 0 --setting wd0 --tag S_wd0
+RAW 2 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --wd 0 --setting wd0 --tag S_wd0
+FLAT 2 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --wd 0 --setting wd0 --tag S_wd0
+RAW 1 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --schedule cosine --setting cosine --tag S_cosine
+FLAT 1 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --schedule cosine --setting cosine --tag S_cosine
+RAW 2 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --schedule cosine --setting cosine --tag S_cosine
+FLAT 2 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --schedule cosine --setting cosine --tag S_cosine
+RAW 1 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag L_base
+FLAT 1 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --setting base --tag L_base
+RAW 2 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag L_base
+FLAT 2 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --setting base --tag L_base
+RAW 1 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --wd 0 --setting wd0 --tag L_wd0
+FLAT 1 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --wd 0 --setting wd0 --tag L_wd0
+RAW 2 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --wd 0 --setting wd0 --tag L_wd0
+FLAT 2 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --wd 0 --setting wd0 --tag L_wd0
+RAW 1 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --schedule cosine --setting cosine --tag L_cosine
+FLAT 1 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --schedule cosine --setting cosine --tag L_cosine
+RAW 2 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --schedule cosine --setting cosine --tag L_cosine
+FLAT 2 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --schedule cosine --setting cosine --tag L_cosine
+RAW 3 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag S_base
+FLAT 3 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --setting base --tag S_base
+CURATEDF 3 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --setting base --tag S_base
+RAW 3 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag M_base
+FLAT 3 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base
+CURATEDF 3 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base
+RAW 3 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag L_base
+FLAT 3 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --setting base --tag L_base
+CURATEDF 3 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --setting base --tag L_base
+RAW 4 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag S_base
+FLAT 4 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --setting base --tag S_base
+CURATEDF 4 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --setting base --tag S_base
+RAW 4 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag M_base
+FLAT 4 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base
+CURATEDF 4 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base
+RAW 4 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag L_base
+FLAT 4 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --setting base --tag L_base
+CURATEDF 4 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --setting base --tag L_base
+RAW 5 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag S_base
+FLAT 5 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --setting base --tag S_base
+CURATEDF 5 --model S --v5 --warmup-docs 1000000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 1.2418569654e-05 --level 300 --setting base --tag S_base
+RAW 5 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag M_base
+FLAT 5 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base
+CURATEDF 5 --model M --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 2.0057493899e-06 --level 100 --setting base --tag M_base
+RAW 5 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type RAW --level RAW --budget-tokens 300000000 --setting base --tag L_base
+FLAT 5 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --setting base --tag L_base
+CURATEDF 5 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 2.6046921207e-07 --level 30 --setting base --tag L_base
+FLAT 1 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 6.4338123202e-08 --level 15 --setting base --tag L_base_15
+CURATEDF 1 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 6.4338123202e-08 --level 15 --setting base --tag L_base_15
+FLAT 2 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 6.4338123202e-08 --level 15 --setting base --tag L_base_15
+CURATEDF 2 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 6.4338123202e-08 --level 15 --setting base --tag L_base_15
+FLAT 1 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 1.0000000000e-15 --level 8 --setting base --tag L_base_8
+CURATEDF 1 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 1.0000000000e-15 --level 8 --setting base --tag L_base_8
+FLAT 2 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type FLAT --budget-tokens 300000000 --tau 1.0000000000e-15 --level 8 --setting base --tag L_base_8
+CURATEDF 2 --model L --v5 --warmup-docs 300000 --results-subdir v5_runs --corpus-type CURATED --budget-tokens 300000000 --tau 1.0000000000e-15 --level 8 --setting base --tag L_base_8

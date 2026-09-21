@@ -77,7 +77,16 @@ class Evaluator:
         model.train()
         return float(nll.mean())
 
-    def evaluate(self, model, n_k: np.ndarray) -> dict:
+    @torch.no_grad()
+    def probe_accuracy(self, model, probe_keys: np.ndarray) -> float:
+        """v5: top-1 accuracy on the probe facts (fixed template per fact)."""
+        model.eval()
+        _, _, hit = self._object_scores(model, probe_keys, self.templ_of_key[probe_keys])
+        model.train()
+        return float(hit.mean())
+
+    def evaluate(self, model, n_k: np.ndarray, exclude: np.ndarray | None = None) -> dict:
+        """`exclude`: boolean mask of facts left out of facts_stored / bits_stored (v5 probe facts)."""
         model.eval()
         out = {}
         # 1. In-distribution object loss.
@@ -89,7 +98,10 @@ class Evaluator:
         h_nll, _, _ = self._object_scores(model, self.head_keys, self.templ_of_key[self.head_keys])
         out["head_loss_bits"] = float(h_nll.mean())
         # 2. Facts stored over delivered facts.
-        delivered = np.flatnonzero(n_k > 0).astype(np.int64)
+        deliv_mask = n_k > 0
+        if exclude is not None:
+            deliv_mask &= ~exclude
+        delivered = np.flatnonzero(deliv_mask).astype(np.int64)
         nd = len(delivered)
         out["facts_delivered"] = nd
         out["bits_delivered"] = OBJ_BITS * nd

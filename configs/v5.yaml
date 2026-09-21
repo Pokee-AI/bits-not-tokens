@@ -1,0 +1,8 @@
+# v5 retention probe (Experiment Brief v5.1 §3). Identical in every v5 run.
+probe_n_facts: 2000
+probe_rank_lo: 200000      # probe facts drawn with the world seed from ranks [lo, hi)
+probe_rank_hi: 400000
+probe_window_lo: 3200000   # absolute document range [lo, hi) in which probe documents replace ordinary draws
+probe_window_hi: 4270000
+probe_exposures: 100       # each probe fact appears exactly this many times inside the window
+probe_measure_every: 500000  # documents between probe measurements on the main-run weights after the window

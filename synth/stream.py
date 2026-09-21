@@ -34,18 +34,38 @@ class DocStream:
         self.n_k = np.zeros(world.n_facts, dtype=np.int32)
         self.docs_seen = 0
         self.tokens_seen = 0
+        # v5: document index of each fact's first and last exposure (-1 = never)
+        self.first_seen = np.full(world.n_facts, np.iinfo(np.int32).max, dtype=np.int32)
+        self.last_seen = np.full(world.n_facts, -1, dtype=np.int32)
+        self.probe = None  # v5 retention probe, see attach_probe()
 
     # -- subclass hook -------------------------------------------------------
     def _draw_keys(self, n: int) -> np.ndarray:
         raise NotImplementedError
 
     # -- public --------------------------------------------------------------
+    def attach_probe(self, probe_keys: np.ndarray, positions: np.ndarray, facts_at_positions: np.ndarray) -> None:
+        """v5: at document index positions[i] (sorted), the ordinary draw is replaced by probe fact
+        facts_at_positions[i]. The schedule is fixed for the whole run."""
+        order = np.argsort(positions, kind="stable")
+        self.probe = {"keys": np.asarray(probe_keys, dtype=np.int64), "pos": positions[order].astype(np.int64),
+                      "fact": facts_at_positions[order].astype(np.int64)}
+
     def next_batch(self, n: int) -> Batch:
         keys = self._draw_keys(n)
+        if self.probe is not None:  # replace scheduled positions inside this batch
+            lo, hi = self.docs_seen, self.docs_seen + n
+            a, b = np.searchsorted(self.probe["pos"], [lo, hi])
+            if b > a:
+                keys = np.array(keys, dtype=np.int64, copy=True)
+                keys[self.probe["pos"][a:b] - lo] = self.probe["fact"][a:b]
         templ = self.rng.integers(0, self.world.n_templates, size=n)
         docs, obj_pos, n_tok = self.world.build_docs(keys, templ, self.filler_n, self.rng)
         # Exact information counter: n_k counts consumptions of each fact.
         np.add.at(self.n_k, keys, 1)
+        idx = (self.docs_seen + np.arange(n)).astype(np.int32)
+        np.minimum.at(self.first_seen, keys, idx)
+        np.maximum.at(self.last_seen, keys, idx)
         self.docs_seen += n
         self.tokens_seen += n_tok
         return Batch(docs=docs, keys=keys, obj_pos=obj_pos, n_tokens=n_tok)
@@ -60,6 +80,8 @@ class DocStream:
             "n_k": self.n_k.copy(),
             "docs_seen": self.docs_seen,
             "tokens_seen": self.tokens_seen,
+            "first_seen": self.first_seen.copy(),
+            "last_seen": self.last_seen.copy(),
         }
 
     def restore(self, snap: dict) -> None:
@@ -67,6 +89,8 @@ class DocStream:
         self.n_k = snap["n_k"].copy()
         self.docs_seen = snap["docs_seen"]
         self.tokens_seen = snap["tokens_seen"]
+        self.first_seen = snap["first_seen"].copy()
+        self.last_seen = snap["last_seen"].copy()
 
 
 class ZipfStream(DocStream):
@@ -250,3 +274,43 @@ class FlatStream(ProbStream):
         # a batch that starts inside the warm-up is drawn entirely from p (batch-boundary rounding)
         self.cdf = self.cdf_p if self.docs_seen < self.warmup_docs else self.cdf_q
         return super()._draw_keys(n)
+
+
+# ----------------------------------------------------------------------------------------
+# v5: retention probe (Experiment Brief v5.1 §3)
+def probe_keys_for(world: World, cfg: dict) -> np.ndarray:
+    """2,000 probe facts drawn with the WORLD seed from popularity ranks [lo, hi)."""
+    rng = np.random.default_rng([world.world_seed, 0x9B0BE])
+    ranks = rng.choice(np.arange(cfg["probe_rank_lo"], cfg["probe_rank_hi"]), size=cfg["probe_n_facts"], replace=False)
+    return world.rank_to_key[np.sort(ranks)].astype(np.int64)
+
+
+def probe_schedule(probe_keys: np.ndarray, cfg: dict, run_seed: int):
+    """Positions (document indices in the window, uniform without replacement) and the probe
+    fact at each; every probe fact appears exactly probe_exposures times."""
+    rng = np.random.default_rng([run_seed, 0x9B0BE])
+    n_docs = len(probe_keys) * cfg["probe_exposures"]
+    positions = rng.choice(np.arange(cfg["probe_window_lo"], cfg["probe_window_hi"]), size=n_docs, replace=False)
+    facts = rng.permutation(np.repeat(probe_keys, cfg["probe_exposures"]))
+    return positions, facts
+
+
+def make_stream_v5(world: World, corpus: dict, run_seed: int, probe_cfg: dict, warmup_docs: int | None = None) -> DocStream:
+    """RAW / FLAT / CURATED streams with the probe facts' probability zeroed and the probe attached."""
+    from synth.information import shifted_zipf_probs
+    pk = probe_keys_for(world, probe_cfg)
+    p = shifted_zipf_probs(world.n_facts, float(corpus["zipf_a"]), float(corpus["zipf_q"]))
+    key_to_rank = np.argsort(world.rank_to_key)
+    p[key_to_rank[pk]] = 0.0
+    p /= p.sum()
+    kind = corpus["sampling"]
+    if kind == "shifted_zipf":
+        st = ProbStream(world, p, int(corpus["filler_n"]), run_seed)
+    elif kind == "flat":
+        assert corpus.get("tau") is not None and warmup_docs is not None
+        st = FlatStream(world, p, float(corpus["tau"]), warmup_docs, int(corpus["filler_n"]), run_seed)
+    else:
+        raise ValueError(kind)
+    pos, facts = probe_schedule(pk, probe_cfg, run_seed)
+    st.attach_probe(pk, pos, facts)
+    return st

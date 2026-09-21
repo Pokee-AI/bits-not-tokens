@@ -1,0 +1,8 @@
+# scaled-down probe for smoke tests only
+probe_n_facts: 200
+probe_rank_lo: 200000
+probe_rank_hi: 400000
+probe_window_lo: 30000
+probe_window_hi: 60000
+probe_exposures: 100
+probe_measure_every: 20000
