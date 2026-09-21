@@ -89,7 +89,7 @@ def fig_ieff_v2(ie: pd.DataFrame, n0: float, band=None):
     if band:
         ax.axvspan(band[0], band[1], color="#e6e6e3", alpha=0.6, zorder=0)
         ax.axhline(300 * 12, color="#8a8a85", lw=1, ls="-.")
-        ax.text(band[0], ymax * 0.7, "H2v2 band at T = 300", fontsize=10, color="#55554f")
+        ax.text(band[0] * 1.05, ymin * 1.6, "H2v2 band\nat T = 300", fontsize=10, color="#55554f")
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_xlim(lo, hi)

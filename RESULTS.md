@@ -126,3 +126,124 @@ about the learner, not a bug we could find.
 See `DEVIATIONS.md` (10 items; none changed after the runs were launched). Seed 3 was
 added for all corpora because GPUs were free; per-seed values above show it changed
 no conclusion. Wall time: 15–20 min per Zipf run, 7 min per EQ4 run on one H100.
+
+---
+
+# v2: held-out test of the x-axis claim (PASS_CRITERIA_v2.md)
+
+Pre-registered after v1 (commit `4e73f29`), before any v2 run. Six held-out runs
+(EQ16_n0, EQ16_n64, EQ32_n0 × seeds 1, 2; full K = 1,000,000; same model, LR 3e-4, protocol)
+plus reruns of the fifteen v1 runs with per-fact hit saving for the absorption curve.
+All 21 runs completed without errors. Wall time: EQ16 24–33 min, EQ32 49–50 min.
+
+**Verdict: H2v2 FAIL.** None of the three held-out corpora reaches T = 300 stored facts
+(or T = 200); EQ16_n64 alone reaches T = 100, at I_eff = 9.4 × 10⁶ — three orders of
+magnitude outside the Zipf band [3.2 × 10³, 1.8 × 10⁴]. This outcome was predicted and
+recorded before the runs (DEVIATIONS.md #11): I_eff with the frozen concave form credits
+a single exposure with 9.6 % of a fact, while the absorption curve below shows the true
+credit at 1–16 exposures is ≈ 0.
+
+## Frozen parameters and targets
+
+- n0 = 9.88, fitted on the twelve v1 Zipf runs (EQ4 excluded), single value for both filler
+  levels (per-level fits 3.5 / 23.3 lie on a residual plateau within 2–4 % of the joint
+  optimum). Not refitted. An exploratory refit including the held-out runs goes to the
+  lower bound (0.027), i.e. it degenerates to "bits delivered": no n0 fits both families.
+- T ∈ {100, 200, 300} facts stored (all four Zipf corpora reach 300 in every seed; EQ4 never
+  exceeds 34 seed-mean, inside chance-correction noise).
+
+## H2v2 crossings and spreads (seed-averaged curves, log-log interpolation)
+
+`results/h2v2_crossings.csv`, `results/h2v2_spreads.csv`.
+
+| T | corpora reaching T | spread in tokens | spread in I_eff | never reach T |
+|---|---|---|---|---|
+| 100 | Z05_n0, Z05_n64, Z10_n0, Z10_n64, EQ16_n64 | 3,199 | 4,791 | EQ16_n0, EQ32_n0, EQ4_n16 |
+| 200 | Z05_n0, Z05_n64, Z10_n0, Z10_n64 | 119 | 1.66 | EQ16_n0, EQ16_n64, EQ32_n0, EQ4_n16 |
+| 300 | Z05_n0, Z05_n64, Z10_n0, Z10_n64 | 231 | 1.37 | EQ16_n0, EQ16_n64, EQ32_n0, EQ4_n16 |
+
+At T = 300 the four Zipf corpora reach 300 stored facts at I_eff = 6,477 (Z05_n0), 8,858
+(Z05_n64), 6,962 (Z10_n0), 8,752 (Z10_n64) bits — spread 1.37 — while their token counts
+span 0.96M to 221M (spread 231). Band for the held-out corpora: [3,239, 17,715]. Held-out
+x_Ieff at T = 300: EQ16_n0 never, EQ16_n64 never, EQ32_n0 never → FAIL for each.
+
+Held-out final points (facts stored, chance-corrected; in-distribution object loss in bits):
+EQ16_n0 29 / 29 (12.00 / 12.01), EQ16_n64 172 / 59 (12.02 / 12.02), EQ32_n0 74 / 16
+(12.00 / 12.01) for seeds 1 / 2. The chance-correction noise is σ ≈ 16 facts, so these are
+0–0.02 % of the 1,000,000 delivered facts. In-distribution loss never moved off 12.0 bits
+at any of the 13–15 measurement points of any held-out run.
+
+## H1, descriptive (v1 runs; no change)
+
+| corpus | β per seed | β mean | ideal learner, same doc range | predicted a/(1+a) |
+|---|---|---|---|---|
+| Z05_n0  | 0.246 / 0.244 / 0.246 | 0.245 | 0.361 | 0.333 |
+| Z05_n64 | 0.275 / 0.279 / 0.275 | 0.276 | 0.361 | 0.333 |
+| Z10_n0  | 0.488 / 0.495 / 0.480 | 0.488 | 0.500 | 0.500 |
+| Z10_n64 | 0.570 / 0.527 / 0.592 | 0.563 | 0.500 | 0.500 |
+
+## Absorption curve: fraction of delivered facts stored vs exposures n_k
+
+`results/absorption.csv`, `figures/fig3_absorption.png`. Top-1 fraction minus 1/4096, at
+each run's final measurement point, seed mean of three (v1 corpora, from the bit-identical
+reruns) or two (held-out) seeds. Bins with < 50 facts omitted from the figure.
+
+| corpus | 1 | 2 | 3–4 | 5–8 | 9–16 | 17–32 | 33–64 | 65–128 | 129–256 | ≥ 257 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Z05_n0  | 0.007 | 0.016 | 0.034 | 0.081 | 0.168 | 0.302 | 0.522 | 0.897 | 1.000 | 1.000 |
+| Z05_n64 | 0.004 | 0.013 | 0.029 | 0.070 | 0.158 | 0.284 | 0.470 | 0.885 | 0.998 | 1.000 |
+| Z10_n0  | 0.003 | 0.008 | 0.017 | 0.025 | 0.027 | 0.088 | 0.546 | 0.985 | 1.000 | 1.000 |
+| Z10_n64 | 0.002 | 0.008 | 0.009 | 0.015 | 0.027 | 0.047 | 0.314 | 0.962 | 1.000 | 1.000 |
+| EQ4_n16 (n_k = 4) | | | 0.000 | | | | | | | |
+| EQ16_n0 (n_k = 16) | | | | | 0.000 | | | | | |
+| EQ16_n64 (n_k = 16) | | | | | 0.000 | | | | | |
+| EQ32_n0 (n_k = 32) | | | | | | 0.000 | | | | |
+
+Per-seed values agree to ±0.01 in every bin (`results/absorption.csv`).
+
+What it shows:
+
+1. **Storage is a sigmoid in exposures, not the concave 1 − e^(−n/n0).** In the Zipf
+   corpora a fact needs ~40–60 exposures to be stored with 50 % probability and ~130 to be
+   stored reliably; below 8 exposures fewer than 1 in 12 is stored. This is why I_eff with
+   any n0 fails on EQ corpora (DEVIATIONS.md #11).
+2. **Filler barely changes absorption per exposure.** Z05_n0 and Z05_n64 are within 0.05 in
+   every bin. Filler costs tokens (6–9× on the token axis, v1 §3), not exposures. The a = 1.0
+   pair differs more (Z10_n64 below Z10_n0 at 17–64 exposures).
+3. **Exposure count alone does not determine storage.** A fact seen 16 times in a Zipf corpus
+   is stored 16–17 % (a = 0.5) or 3 % (a = 1.0) of the time; every fact seen 16 times in EQ16
+   is stored 0.0 % of the time, and 32 times in EQ32 also 0.0 %. Same model, same LR, same
+   world, same number of exposures. The rest of the corpus matters: Zipf corpora contain
+   facts seen thousands of times, EQ corpora contain none.
+4. **Exposure rate matters too (weaker evidence).** The same Z05_n0 run evaluated at an
+   intermediate point gave 0.31 for the 9–16 bin vs 0.17 at the end — the facts occupying
+   that bin earlier had a higher exposure rate.
+
+## Determinism check
+
+Every v1 run rerun with the same seed reproduced every CSV value exactly (max absolute
+difference 0.0 in object loss and facts stored, identical facts delivered, all 15 runs;
+`results/determinism_check.csv`).
+
+## Unseen-fact control (all 36 runs)
+
+Mean top-1 on unseen facts 1.9e-4 – 3.2e-4 per corpus vs chance 2.44e-4; max on any
+Zipf/held-out point 6.8e-4 (EQ32_n0, control set of ~1,500 remaining unseen facts).
+
+## What v2 settles and what it leaves open
+
+Settled: "bits delivered" is not the collapsing axis (v1), and neither is the
+exposure-corrected I_eff with the concave form and a single n0 (v2). Storage per exposure
+follows a sigmoid centred near 50 exposures in the Zipf corpora, and is zero at 4, 16 and
+32 exposures in corpora where every fact has the same count. Filler does not change the
+per-exposure absorption; repetition structure does.
+
+Open: why identical exposure counts store 0 % in EQ and 3–17 % in Zipf. Two candidates the
+present data cannot separate: (a) the frequent facts in a Zipf corpus bootstrap a retrieval
+mechanism that rarer facts then reuse, and EQ corpora never build it (consistent with the
+EQ in-distribution loss sitting at exactly 12.00 bits — no partial learning at all); (b)
+interference from ~1M concurrently unstored facts overwrites each fact's update before it
+recurs (~7,800 steps apart in EQ16), while in Zipf the stored popular facts contribute no
+gradient and the effective competing set is far smaller. A mixed corpus (a small Zipf head
+plus an EQ tail) would separate them. Also open: whether the sigmoid's centre moves with LR,
+batch size or model size — only one learner configuration was run.

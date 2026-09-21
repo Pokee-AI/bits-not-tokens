@@ -1,1 +1,16 @@
-
+run,points_v1,points_rerun,max_abs_diff_obj_loss_bits,max_abs_diff_facts_stored,identical_facts_delivered
+EQ4_n16_seed1,11,11,0.0,0.0,True
+EQ4_n16_seed2,11,11,0.0,0.0,True
+EQ4_n16_seed3,11,11,0.0,0.0,True
+Z05_n0_seed1,12,12,0.0,0.0,True
+Z05_n0_seed2,12,12,0.0,0.0,True
+Z05_n0_seed3,12,12,0.0,0.0,True
+Z05_n64_seed1,12,12,0.0,0.0,True
+Z05_n64_seed2,12,12,0.0,0.0,True
+Z05_n64_seed3,12,12,0.0,0.0,True
+Z10_n0_seed1,12,12,0.0,0.0,True
+Z10_n0_seed2,12,12,0.0,0.0,True
+Z10_n0_seed3,12,12,0.0,0.0,True
+Z10_n64_seed1,12,12,0.0,0.0,True
+Z10_n64_seed2,12,12,0.0,0.0,True
+Z10_n64_seed3,12,12,0.0,0.0,True
