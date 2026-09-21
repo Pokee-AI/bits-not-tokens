@@ -124,3 +124,21 @@ None of these changed after the real runs were launched.
     unaffected. Runs are deterministic, so the full queue (54 + 6 RAW reruns) was relaunched
     under unchanged code; `scripts/sync_remote.sh` now pushes via `git push` (which never
     touches untracked files) and `scripts/pull_results.sh` pulls results additively.
+
+## v5 notes (Experiment Brief v5.1; CRITERIA_v5.md)
+
+31. **FLAT-8 (Part C) is infeasible within the budget**: fully uniform sampling over the
+    1,000,000 facts already gives 10.4 exposures per fact in FLAT's stationary phase, so no τ
+    reaches c = 8. The cell is run as the fully uniform limit (τ → 0; every fact "at the cap")
+    and reported at its true level, c = 10.4 (CURATED at the same τ: 24.7). Level 15 is feasible
+    (399,904 facts at the cap).
+32. **Cosine schedule is computed in token space**: lr(t) = peak · (0.1 + 0.9 · ½(1 + cos(π · tokens/B)))
+    after the 100-step linear warm-up, so it reaches exactly 10 % of peak at B regardless of
+    the small variation in tokens per batch.
+33. **Probe accuracy on the main-run weights is logged at window end and every 500,000
+    documents thereafter, but the main run stops at 0.9 × B** (its last 10 % is covered only
+    by the cooldown branch, as in v1–v4), so the retention curve on main weights ends at
+    0.9 × B; the branch-weight value at B is logged separately.
+34. **Probe facts have probability zero in the ordinary stream (renormalised) but keep the
+    v4 τ**; the removed mass is ≈ 3 × 10⁻⁴ of p, so the flattened distribution is unchanged
+    to that precision.
