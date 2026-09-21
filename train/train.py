@@ -49,7 +49,10 @@ def git_commit() -> str:
 
 
 def measurement_points(cfg: dict, max_docs: int, batch: int) -> list[int]:
-    pts = np.geomspace(cfg["meas_min_docs"], cfg["meas_max_docs"], cfg["meas_points"])
+    pts = list(np.geomspace(cfg["meas_min_docs"], cfg["meas_max_docs"], cfg["meas_points"]))
+    ratio = pts[1] / pts[0]
+    while pts[-1] * ratio < max_docs:  # corpora larger than meas_max_docs: continue the sequence
+        pts.append(pts[-1] * ratio)
     pts = [int(round(p / batch)) * batch for p in pts]
     pts = [p for p in pts if p <= max_docs]
     if not pts or pts[-1] != max_docs:
@@ -190,6 +193,9 @@ def main():
             loss_main = float(last.item())
         ev = evaluator.evaluate(model, stream.n_k)
         np.savez_compressed(os.path.join(art_dir, f"nk_{D}.npz"), n_k=stream.n_k)
+        # per-fact top-1 hits and NLL (bits, fp16) over all K facts; undelivered facts are 0
+        np.savez_compressed(os.path.join(art_dir, f"hits_{D}.npz"),
+                            hit=np.packbits(ev.pop("_hit")), nll_bits=ev.pop("_nll").astype(np.float16))
         row = {"corpus": corpus["name"], "zipf_a": corpus.get("zipf_a", ""), "filler_n": filler_n,
                "seed": args.seed, "lr": lr, "docs": D, "train_tokens": stream.tokens_seen,
                "ideal_loss_bits": ideal(D), "train_loss_nats": loss_main,

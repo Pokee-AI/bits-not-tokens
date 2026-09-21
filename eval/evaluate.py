@@ -74,12 +74,17 @@ class Evaluator:
         nd = len(delivered)
         out["facts_delivered"] = nd
         out["bits_delivered"] = OBJ_BITS * nd
+        hit_all = np.zeros(self.world.n_facts, dtype=bool)
+        nll_all = np.zeros(self.world.n_facts, dtype=np.float32)
         if nd:
             d_nll, _, d_hit = self._object_scores(model, delivered, self.templ_of_key[delivered])
             d_soft = np.maximum(0.0, OBJ_BITS - d_nll).sum()
             d_hits = int(d_hit.sum())
+            hit_all[delivered] = d_hit
+            nll_all[delivered] = d_nll
         else:
             d_soft, d_hits = 0.0, 0
+        out["_hit"], out["_nll"] = hit_all, nll_all  # per-fact arrays, consumed by the trainer
         # 3. Control: fixed random sample of unseen facts.
         unseen = self.control_order[n_k[self.control_order] == 0][: self.n_control]
         c_nll, _, c_hit = self._object_scores(model, unseen.astype(np.int64), self.templ_of_key[unseen])
