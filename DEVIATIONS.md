@@ -114,3 +114,7 @@ None of these changed after the real runs were launched.
     `results/v4_runs_invalid_evaluator/` and `artifacts/v4_invalid_evaluator/`, and the full
     54-run queue relaunched from scratch under the fixed code. Runs are deterministic, so the
     relaunch reproduces the same training; no run, seed or level was dropped.
+29. **RAW rerun under v4 code to log `weighted_acc_p` and `head_loss_bits`** (the v3 RAW CSVs
+    predate these columns and P3 needs RAW's `weighted_acc_p` per size and seed). Training is
+    deterministic (checked on RAW-S seed 1, deviation 22), so all pre-existing columns are
+    identical; the analysis asserts equality with the v3 rows before using the rerun.

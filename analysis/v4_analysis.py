@@ -22,7 +22,17 @@ CHANCE = 1 / 4096
 def load() -> pd.DataFrame:
     """v4 runs plus the v3 RAW runs (reused; determinism verified)."""
     files = sorted(glob.glob(os.path.join(ROOT, "results", "v4_runs", "*.csv")))
+    raw_v4 = [f for f in files if os.path.basename(f).startswith("RAW_")]
+    # RAW: prefer the v4 rerun (adds weighted_acc_p / head_loss_bits); assert it equals the v3 rows
     raw = sorted(glob.glob(os.path.join(ROOT, "results", "v3_phaseP", "RAW_seed*_*.csv")))
+    for f in raw_v4:
+        v3 = os.path.join(ROOT, "results", "v3_phaseP", os.path.basename(f))
+        if os.path.exists(v3):
+            a, b = pd.read_csv(v3), pd.read_csv(f)
+            for col in ["docs", "train_tokens", "facts_delivered", "facts_stored", "obj_loss_bits_indist", "unseen_top1_acc"]:
+                assert np.array_equal(a[col].values, b[col].values), f"RAW rerun differs from v3 in {col}: {f}"
+    have = {os.path.basename(f) for f in raw_v4}
+    raw = [f for f in raw if os.path.basename(f) not in have]
     df = pd.concat([pd.read_csv(f) for f in files + raw], ignore_index=True)
     df.loc[df.corpus == "RAW", "corpus_type"] = "RAW"
     df.loc[df.corpus == "RAW", "level"] = "RAW"

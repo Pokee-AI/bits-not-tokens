@@ -1,0 +1,6 @@
+RAW 1 --model L --budget-tokens 300000000 --cap 30 --warmup-docs 300000 --level RAW --corpus-type RAW --results-subdir v4_runs --tag L
+RAW 1 --model M --budget-tokens 300000000 --cap 30 --warmup-docs 300000 --level RAW --corpus-type RAW --results-subdir v4_runs --tag M
+RAW 1 --model S --budget-tokens 300000000 --cap 40 --warmup-docs 1000000 --level RAW --corpus-type RAW --results-subdir v4_runs --tag S
+RAW 2 --model L --budget-tokens 300000000 --cap 30 --warmup-docs 300000 --level RAW --corpus-type RAW --results-subdir v4_runs --tag L
+RAW 2 --model M --budget-tokens 300000000 --cap 30 --warmup-docs 300000 --level RAW --corpus-type RAW --results-subdir v4_runs --tag M
+RAW 2 --model S --budget-tokens 300000000 --cap 40 --warmup-docs 1000000 --level RAW --corpus-type RAW --results-subdir v4_runs --tag S
