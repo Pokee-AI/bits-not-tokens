@@ -1,0 +1,6 @@
+name: CURATEDF         # v4 CURATED (flattened, no filler); named to avoid clashing with v3's capped CURATED
+sampling: flat
+zipf_a: 0.5
+zipf_q: 1000
+filler_n: 0
+max_docs: 100000000

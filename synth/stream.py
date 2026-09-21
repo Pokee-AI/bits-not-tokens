@@ -219,8 +219,34 @@ def make_stream_v3(world: World, corpus: dict, run_seed: int, cap: int | None = 
     p = shifted_zipf_probs(world.n_facts, float(corpus["zipf_a"]), float(corpus["zipf_q"]))
     if kind == "shifted_zipf":
         return ProbStream(world, p, int(corpus["filler_n"]), run_seed)
+    if kind == "flat":
+        assert corpus.get("tau") is not None and warmup_docs is not None, "flat stream needs tau and W"
+        return FlatStream(world, p, float(corpus["tau"]), warmup_docs, int(corpus["filler_n"]), run_seed)
     if kind == "capped":
         assert cap is not None and warmup_docs is not None, "capped stream needs c* and W"
         return CappedStream(world, p, cap, warmup_docs, int(corpus["filler_n"]), run_seed,
                             int(corpus.get("block", 50_000)))
     return make_stream(world, corpus, run_seed)
+
+
+# ----------------------------------------------------------------------------------------
+# v4: stationary flattened stream (Experiment Brief v4.1)
+class FlatStream(ProbStream):
+    """Warm-up: i.i.d. from p for `warmup_docs` documents; then i.i.d. from q = flatten(p, tau)
+    for the rest of the run. The switch happens once; no fact is ever removed."""
+
+    def __init__(self, world: World, p: np.ndarray, tau: float, warmup_docs: int, filler_n: int,
+                 run_seed: int):
+        from synth.information import flatten
+        super().__init__(world, p, filler_n, run_seed)
+        self.tau, self.warmup_docs = float(tau), int(warmup_docs)
+        self.q = flatten(self.p, self.tau)
+        self.cdf_p = self.cdf.copy()
+        self.cdf_q = np.cumsum(self.q)
+        self.cdf_q[-1] = 1.0
+        self.n_at_cap = int((self.p > self.tau).sum())
+
+    def _draw_keys(self, n: int) -> np.ndarray:
+        # a batch that starts inside the warm-up is drawn entirely from p (batch-boundary rounding)
+        self.cdf = self.cdf_p if self.docs_seen < self.warmup_docs else self.cdf_q
+        return super()._draw_keys(n)

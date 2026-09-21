@@ -1,0 +1,6 @@
+name: FLAT
+sampling: flat         # warm-up from p (W docs), then i.i.d. from q = min(p, tau)/Z; tau via --tau
+zipf_a: 0.5
+zipf_q: 1000
+filler_n: 16
+max_docs: 100000000

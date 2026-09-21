@@ -41,6 +41,7 @@ class Evaluator:
         self.indist_templ = rng.integers(0, world.n_templates, size=n_indist)
         # 2/3/4. One fixed template per fact, and a fixed order for choosing control facts.
         self.templ_of_key = rng.integers(0, world.n_templates, size=K)
+        self.head_keys = world.rank_to_key[:1000].astype(np.int64)  # v4: 1,000 most popular facts
         self.control_order = rng.permutation(K)
         self.obj_lo, self.obj_hi = world.vocab.obj0, world.vocab.obj0 + world.vocab.n_obj_tok
 
@@ -80,9 +81,13 @@ class Evaluator:
         model.eval()
         out = {}
         # 1. In-distribution object loss.
-        nll_r, nll_f, _ = self._object_scores(model, self.indist_keys, self.indist_templ)
+        nll_r, nll_f, hit_i = self._object_scores(model, self.indist_keys, self.indist_templ)
         out["obj_loss_bits_indist"] = float(nll_r.mean())
         out["obj_loss_bits_indist_fullvocab"] = float(nll_f.mean())
+        # v4: top-1 accuracy weighted by the corpus's base distribution (the in-dist set is sampled from it)
+        out["weighted_acc_p"] = float(hit_i.mean())
+        h_nll, _, _ = self._object_scores(model, self.head_keys, self.templ_of_key[self.head_keys])
+        out["head_loss_bits"] = float(h_nll.mean())
         # 2. Facts stored over delivered facts.
         delivered = np.flatnonzero(n_k > 0).astype(np.int64)
         nd = len(delivered)

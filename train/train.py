@@ -41,6 +41,8 @@ CSV_COLS = [
     "bits_stored_per_param_total", "k_sub", "frac_stored", "mean_exposures", "cap",
     "warmup_docs", "facts_with_at_least_cstar_exposures", "cap_adequacy", "budget_tokens",
     "n_uncapped",
+    # v4 extras
+    "corpus_type", "level", "tau", "n_facts_at_cap", "weighted_acc_p", "head_loss_bits",
 ]
 
 
@@ -90,12 +92,20 @@ def main():
                     help="v3 Phase A: log in-distribution object loss every N steps to artifacts/<run>/probe.csv")
     ap.add_argument("--save-final", action="store_true", help="save final weights to artifacts/<run>/final.pt")
     ap.add_argument("--results-subdir", default="runs", help="results/<subdir>/<run>.csv")
+    # v4 options (Experiment Brief v4.1)
+    ap.add_argument("--tau", type=float, default=None, help="v4 flat stream: flattening threshold")
+    ap.add_argument("--level", default="", help="v4: flattening level label (1000/300/100/30/x30)")
+    ap.add_argument("--corpus-type", default="", help="v4: RAW | FLAT | CURATED")
+    ap.add_argument("--stop-after-points", type=int, default=None,
+                    help="stop after this many measurement points (determinism checks)")
     args = ap.parse_args()
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     cfg = yaml.safe_load(open(os.path.join(root, "configs", "common.yaml")))
     corpus = yaml.safe_load(open(args.corpus))
-    v3 = corpus.get("sampling") in ("uniform_subset", "shifted_zipf", "capped") or args.budget_tokens
+    v3 = corpus.get("sampling") in ("uniform_subset", "shifted_zipf", "capped", "flat") or args.budget_tokens
+    if args.tau is not None:
+        corpus["tau"] = args.tau
     msize = yaml.safe_load(open(os.path.join(root, "configs", "models.yaml")))[args.model]
     if args.model != "L":
         lr_file = os.path.join(root, "configs", "v3_lr.yaml")
@@ -113,6 +123,8 @@ def main():
     if v3 or args.model != "L":
         full_cfg["v3"] = {"model": args.model, "model_cfg": msize, "budget_tokens": args.budget_tokens,
                           "cap": args.cap, "warmup_docs": args.warmup_docs}
+    if args.tau is not None:
+        full_cfg["v4"] = {"tau": args.tau, "level": args.level, "corpus_type": args.corpus_type}
     config_hash = hashlib.sha256(json.dumps(full_cfg, sort_keys=True).encode()).hexdigest()[:12]
     commit = git_commit()
     art_dir = os.path.join(root, "artifacts", run_name)
@@ -264,6 +276,8 @@ def main():
                "ideal_loss_bits": ideal(stream.docs_seen), "train_loss_nats": loss_main,
                "wall_seconds": time.time() - t0, "git_commit": commit, "config_hash": config_hash,
                "cooldown": int(not args.no_cooldown), **ev}
+        row.update({"corpus_type": args.corpus_type, "level": args.level, "tau": args.tau if args.tau is not None else "",
+                    "n_facts_at_cap": getattr(stream, "n_at_cap", "")})
         row.update({"model_size": args.model, "n_params_nonemb": counts["non_embedding"],
                     "n_params_total": counts["total"],
                     "bits_stored_per_param": ev["bits_stored"] / counts["non_embedding"],
@@ -288,6 +302,9 @@ def main():
               f"wall {row['wall_seconds']:.0f}s", flush=True)
         if exhausted[0] or pi == len(points) - 1:
             break  # the main run's last 10% is never evaluated
+        if args.stop_after_points and pi + 1 >= args.stop_after_points:
+            print(f"[{run_name}] stopping after {pi + 1} measurement points (--stop-after-points)", flush=True)
+            break
         if not args.no_cooldown:
             restore(snap)
             del snap

@@ -55,3 +55,30 @@ def expected_facts_with_at_least(p: np.ndarray, n_docs: int, c: int) -> float:
     from scipy.stats import poisson
     lam = n_docs * p
     return float(np.sum(poisson.sf(c - 1, lam)))
+
+
+# ----------------------------------------------------------------------------------------
+# v4: flattened distributions
+def flatten(p: np.ndarray, tau: float) -> np.ndarray:
+    """q_k = min(p_k, tau) / Z(tau). Every fact keeps a nonzero probability."""
+    q = np.minimum(p, tau)
+    return q / q.sum()
+
+
+def solve_tau(p: np.ndarray, n_stat: int, c: float, iters: int = 200) -> float:
+    """tau such that a capped fact receives c expected exposures in n_stat stationary draws:
+    n_stat * tau / Z(tau) = c, solved by bisection in log tau (the left side is increasing)."""
+    lo, hi = np.log(1e-15), np.log(float(p.max()))
+    for _ in range(iters):
+        mid = 0.5 * (lo + hi)
+        t = np.exp(mid)
+        if n_stat * t / np.minimum(p, t).sum() > c:
+            hi = mid
+        else:
+            lo = mid
+    return float(np.exp(0.5 * (lo + hi)))
+
+
+def capped_exposures(p: np.ndarray, tau: float, n_stat: int) -> float:
+    """Expected stationary-phase exposures of a fact at the cap."""
+    return n_stat * tau / float(np.minimum(p, tau).sum())

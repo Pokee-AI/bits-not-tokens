@@ -86,3 +86,22 @@ None of these changed after the real runs were launched.
     `5a73466`), and the Phase P runs, which live on the server, were unaffected.
 21. **Optional §8 diagnostic not run**; no `--save-final` rerun was made (per instruction:
     only if the diagnostic runs).
+
+## v4 notes (Experiment Brief v4.1; PASS_CRITERIA_v4.md)
+
+22. **`--stop-after-points N`** trainer flag, used only for the RAW-S determinism check (the
+    8 token points are defined by B, so a smaller budget would not reproduce the rows).
+23. **Unit test on empirical capped exposures** compares against the corpus's own
+    `N_stat · τ / Z` plus expected warm-up exposures (for CURATED-c with the shared τ that is
+    ≈ 2.3c, not c), within 2 %.
+24. **CURATED-x30 is placed on the dose-response x-axis at its FLAT-equivalent level**
+    (30 / 2.33 ≈ 13, i.e. the c that FLAT would need for the same τ) with a distinct marker.
+25. **`weighted_acc_p`** is top-1 accuracy on the existing 200,000-document in-distribution
+    set (sampled from p with the fixed eval seed, the same set for every corpus);
+    **`head_loss_bits`** adds the 1,000 most popular facts (fixed template per fact) to the
+    evaluation. No other evaluator change. The v4 CURATED config is named `CURATEDF` in
+    `configs/v3/` to avoid clashing with v3's capped `CURATED`; results label it CURATED.
+26. **Warm-up boundary is rounded up to a batch** (a batch that starts inside the warm-up is
+    drawn entirely from p), as in v3.
+27. **The absorption curve for predictions pools both v3 RAW seeds** (the brief says seed
+    mean; pooling per-fact hits is the same estimator with fewer empty bins).
