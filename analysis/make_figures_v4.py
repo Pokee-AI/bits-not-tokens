@@ -61,10 +61,11 @@ def _level_panels(fin: pd.DataFrame, ycol: str, ylabel: str, name: str, logy: bo
         ax.invert_xaxis()
         ax.set_xticks([3000, 1000, 300, 100, 30, 30 / 2.33])
         ax.set_xticklabels(["RAW", "1000", "300", "100", "30", "x30"])
-        ax.set_xlabel("Flattening level c (exposures of a capped fact, FLAT budget)")
         ax.set_title(SLAB[m], fontsize=14)
     axes[0].set_ylabel(ylabel)
     axes[0].legend(frameon=False, fontsize=9, loc="best")
+    fig.supxlabel("Flattening level c  (exposures of a capped fact within the FLAT budget; RAW = no flattening)",
+                  fontsize=14)
     fig.tight_layout()
     save(fig, name)
 

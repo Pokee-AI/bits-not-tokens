@@ -1,0 +1,58 @@
+{
+ "selected": {
+  "S_FLAT": "300",
+  "S_CURATED": "300",
+  "M_FLAT": "100",
+  "M_CURATED": "100",
+  "L_FLAT": "30",
+  "L_CURATED": "30"
+ },
+ "verdicts": [
+  {
+   "model_size": "S",
+   "selected_CURATED_level": "300",
+   "selected_FLAT_level": "300",
+   "raw_s2": 16954.5634765625,
+   "curated_s2": 38517.661376953125,
+   "ratio_s2": 2.271816754834109,
+   "raw_weighted_acc_s2": 0.768585,
+   "curated_weighted_acc_s2": 0.85785,
+   "P3_s2": true,
+   "P1": "FAIL",
+   "evaluable": true
+  },
+  {
+   "model_size": "M",
+   "selected_CURATED_level": "100",
+   "selected_FLAT_level": "100",
+   "raw_s2": 46013.5634765625,
+   "curated_s2": 127281.2158203125,
+   "ratio_s2": 2.7661673255353185,
+   "raw_weighted_acc_s2": 0.862515,
+   "curated_weighted_acc_s2": 0.93565,
+   "P3_s2": true,
+   "P1": "FAIL",
+   "evaluable": true
+  },
+  {
+   "model_size": "L",
+   "selected_CURATED_level": "30",
+   "selected_FLAT_level": "30",
+   "raw_s2": 67941.5634765625,
+   "curated_s2": 348507.18798828125,
+   "ratio_s2": 5.129513807972703,
+   "raw_weighted_acc_s2": 0.890305,
+   "curated_weighted_acc_s2": 0.960015,
+   "P3_s2": true,
+   "P1": "PASS",
+   "evaluable": true
+  }
+ ],
+ "P1_PASS": false,
+ "P2_PASS": false,
+ "evaluable": {
+  "S": true,
+  "M": true,
+  "L": true
+ }
+}
