@@ -1,0 +1,4 @@
+model_size,c90_source_k_sub,c90_seed_mean,c_star,longest_plateau_docs_k30,W,any_run_left_plateau,note
+L,30000,21.177601742600213,30,128000,300000,True,
+M,30000,22.76710216965418,30,128000,300000,True,
+S,30000,38.82887089367519,40,512000,1000000,True,"2 x longest plateau = 1,050,000 exceeds the cap; W capped at 1,000,000"
