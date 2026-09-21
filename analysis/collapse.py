@@ -126,3 +126,73 @@ if __name__ == "__main__":
     print("n0", out["n0"], "points", out["n0_points_used"], "dropped", out["n0_points_dropped"])
     print(out["ieff_spreads"].to_string(index=False))
     print("H2_PASS", out["H2_PASS"])
+
+
+# ----------------------------------------------------------------------------------------
+# v2: frozen n0, held-out EQ corpora (PASS_CRITERIA_v2.md)
+N0_FROZEN = 9.877276  # fitted on the twelve v1 Zipf runs, EQ4 excluded; never refitted
+TARGETS_V2 = (100, 200, 300)
+ZIPF = ["Z05_n0", "Z05_n64", "Z10_n0", "Z10_n64"]
+
+
+def ieff_table(df: pd.DataFrame, nk: dict, n0: float) -> pd.DataFrame:
+    d = df.set_index(["corpus", "seed", "docs"])
+    rows = [{"corpus": k[0], "seed": k[1], "docs": k[2], "i_eff": i_eff(v, n0),
+             "bits_stored": d.loc[k, "bits_stored"], "facts_stored": d.loc[k, "facts_stored"],
+             "train_tokens": d.loc[k, "train_tokens"], "bits_delivered": d.loc[k, "bits_delivered"]}
+            for k, v in nk.items() if k in d.index]
+    return pd.DataFrame(rows)
+
+
+def h2v2(df: pd.DataFrame, nk: dict, n0: float = N0_FROZEN):
+    from analysis.common import HELDOUT
+    ie = ieff_table(df, nk, n0)
+    m = ie.groupby(["corpus", "docs"], as_index=False)[["i_eff", "train_tokens", "facts_stored"]].mean()
+    cross, spreads = [], []
+    verdict = {}
+    for T in TARGETS_V2:
+        xs = {}
+        for c in sorted(m.corpus.unique(), key=lambda c: (c not in ZIPF, c)):
+            g = m[m.corpus == c].sort_values("docs")
+            xt = loglog_first_crossing(g.train_tokens.values, g.facts_stored.values, T)
+            xi = loglog_first_crossing(g.i_eff.values, g.facts_stored.values, T)
+            cross.append({"T": T, "corpus": c, "x_tokens": xt, "x_ieff": xi, "reached": xt is not None})
+            if xt is not None:
+                xs[c] = (xt, xi)
+        tok = np.array([v[0] for v in xs.values()]); ief = np.array([v[1] for v in xs.values()])
+        not_reached = [c for c in m.corpus.unique() if c not in xs]
+        spreads.append({"T": T, "n_corpora": len(xs), "spread_tokens": tok.max() / tok.min() if len(tok) > 1 else np.nan,
+                        "spread_ieff": ief.max() / ief.min() if len(ief) > 1 else np.nan,
+                        "not_reached": ",".join(not_reached) or "-"})
+        if T == max(TARGETS_V2):
+            z = [xs[c][1] for c in ZIPF if c in xs]
+            L, U = min(z), max(z)
+            per = {}
+            for c in HELDOUT:
+                if c in xs:
+                    per[c] = {"x_ieff": xs[c][1], "within": bool(L / 2 <= xs[c][1] <= 2 * U)}
+                elif c in m.corpus.unique():
+                    per[c] = {"x_ieff": None, "within": False, "note": "never reaches T"}
+            verdict = {"T": T, "zipf_range_ieff": [L, U], "band": [L / 2, 2 * U], "heldout": per,
+                       "PASS": bool(per) and all(v["within"] for v in per.values())}
+    return {"n0": n0, "ieff": ie, "crossings": pd.DataFrame(cross), "spreads": pd.DataFrame(spreads),
+            "verdict": verdict}
+
+
+def determinism_check(df: pd.DataFrame) -> pd.DataFrame:
+    """Compare each v1 run with its `_rerun` twin (same seed): max abs differences."""
+    import glob as _glob
+    rows = []
+    for f in sorted(_glob.glob(os.path.join(ROOT, "results", "runs", "*_rerun.csv"))):
+        b = pd.read_csv(f)
+        base = os.path.basename(f).replace("_rerun.csv", ".csv")
+        a = df[(df.corpus == b.corpus.iloc[0]) & (df.seed == b.seed.iloc[0])].sort_values("docs")
+        if len(a) != len(b):
+            rows.append({"run": base[:-4], "points_v1": len(a), "points_rerun": len(b)})
+            continue
+        b = b.sort_values("docs")
+        rows.append({"run": base[:-4], "points_v1": len(a), "points_rerun": len(b),
+                     "max_abs_diff_obj_loss_bits": float(np.abs(a.obj_loss_bits_indist.values - b.obj_loss_bits_indist.values).max()),
+                     "max_abs_diff_facts_stored": float(np.abs(a.facts_stored.values - b.facts_stored.values).max()),
+                     "identical_facts_delivered": bool((a.facts_delivered.values == b.facts_delivered.values).all())})
+    return pd.DataFrame(rows)

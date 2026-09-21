@@ -41,3 +41,19 @@ None of these changed after the real runs were launched.
 10. **LR sweep runs used the full cooldown-branch protocol** to 1,000,000 documents (the
     brief does not say whether the sweep should use cooldown; using it makes the
     selection criterion match the real measurement).
+
+## v2 notes (PASS_CRITERIA_v2.md)
+
+11. **Prediction recorded 2026-09-21 01:45 UTC, before any v2 result was available.** With
+    n0 = 9.88 frozen, I_eff credits one exposure with 1 − e^(−1/9.88) = 9.6 % of a fact. At
+    T = 300 the Zipf corpora reach 300 stored facts at I_eff ≈ 6.5K–8.9K bits (band
+    [3.2K, 17.7K]) because they have delivered only ~1,000 distinct facts by then. An EQ
+    corpus has ~30,000 once-seen facts at its first measurement point (I_eff ≈ 35K) and
+    stores nothing until exposures reach several per fact (I_eff in the millions). So
+    H2v2 cannot pass as written, whatever the model does; the criterion is kept and the
+    outcome reported. The absorption curve is expected to show near-zero storage at 1–4
+    exposures, i.e. a threshold-like curve rather than the concave exponential assumed by
+    I_eff. Any alternative exposure weighting fitted from it is exploratory.
+12. **Reruns of the v1 corpora** (`--tag rerun`, same seeds) exist only to obtain per-fact
+    hits for the absorption curve. v1 CSVs remain the record; `load_runs` ignores tagged
+    CSVs, and `analysis/collapse.determinism_check` reports v1-vs-rerun differences.
