@@ -1,13 +1,17 @@
 # Bits, not tokens
 
-What a small language model stores from a corpus is set by how often each fact is repeated
-— its exposure **rate** — not by how many tokens the corpus costs or how many bits it
-delivers. In a synthetic world of 1,000,000 random 12-bit facts, flattening a web-like (Zipf)
-repetition profile lets the same model store 2–5× more facts from the same 300M-token budget,
-with no loss on the raw distribution; removing noise tokens buys more documents but no more
-facts; and a stationary stream reaches its steady state within ~10⁷ documents and does not
-grow with 2× or 4× longer training. The advantage holds under five optimizer recipes, and
-forgetting is finite even without weight decay, scaling with the learning rate.
+**Models learn information, not data.** What a small language model stores from a corpus is
+set by how its training tokens are spent — by each fact's exposure rate — not by how many
+tokens there are; and counting the distinct facts a corpus delivers turned out to be the
+wrong axis too (the archived rounds). In a synthetic world of 1,000,000 random 12-bit facts,
+flattening a web-like (Zipf) repetition profile lets the same model store 2–5× more facts
+from the same 300M-token budget, with no loss on the raw distribution. Removing the noise
+tokens as well bought little: about 15 % more facts at L (349K vs 303K) and nothing at S or M.
+A stationary stream reaches its steady state within ~10⁷ documents and does not grow with
+2× or 4× longer training. The advantage holds under five optimizer recipes, and forgetting is
+finite even without weight decay, scaling with the learning rate.
+
+This repository backs Part 1 of the Pokee Insights series: <POST URL>.
 
 ![Facts stored versus flattening level, one panel per model size](figures/v4_fig_dose_response.png)
 
@@ -34,7 +38,9 @@ Two pre-registered rounds. **v4** (`briefs/v4.md`, `PASS_CRITERIA_v4.md`, `RESUL
 three corpus types — RAW (i.i.d. from a shifted Zipf over all facts, 16 noise tokens per
 document), FLAT-c (the same distribution with probabilities capped at a level c, so a capped
 fact gets c expected exposures) and CURATED-c (FLAT-c without noise tokens) — at four levels,
-three model sizes, two seeds, plus predictions committed before launch. **v5** (`briefs/v5.md`,
+three model sizes, two seeds, plus predictions committed before launch. The FLAT runs landed
+within 12 % of prediction at every level where the head was kept; CURATED came in at about
+half, which is the rate-not-count finding (`RESULTS_V4.md`, "Predicted versus actual"). **v5** (`briefs/v5.md`,
 `CRITERIA_v5.md`, `RESULTS_V5.md`): the same comparison under five optimizer recipes, at 2× and
 4× the budget, with a retention probe measuring forgetting directly, and three more seeds.
 
@@ -78,9 +84,20 @@ artifacts/, logs/       not in git: per-run n_k, per-fact hits, exposure times, 
 
 Some frozen files (`RESULTS_V4.md`, `RESULTS_V5.md`, `PASS_CRITERIA_v4.md`, `C_STAR.md`,
 `configs/v3/`) refer to "v3": that is the earlier design round in which the RAW baselines and
-warm-up constants were produced. The three earlier rounds — two failed x-axis hypotheses and a
-capped-repetition design that caused total forgetting — are preserved byte-for-byte on branch
-`archive/rounds-1-3`.
+warm-up constants were produced. The three earlier rounds are preserved byte-for-byte on
+branch `archive/rounds-1-3`. They taught three things, in this order: (a) a fact needs many
+exposures before it is stored; (b) a corpus with no heavily repeated facts never forms the
+recall mechanism at all (Zucchet et al. 2025, arXiv 2503.21676); (c) a stream that shows
+each fact its quota and then drops it forgets everything dropped.
+
+## Cite
+
+```
+Pokee AI (Bill Zhu). Bits, not tokens: what a small language model stores is set by exposure
+rate. Version v0.1-part1, 2026. https://github.com/Pokee-AI/bits-not-tokens
+```
+
+`CITATION.cff` carries the same metadata. Zenodo DOI: <DOI pending>.
 
 This world contains only arbitrary random facts: nothing here is about generalisation,
 reasoning or compressible structure. License: Apache 2.0.

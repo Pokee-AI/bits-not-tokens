@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite it as below."
+title: "Bits, not tokens: what a small language model stores is set by exposure rate"
+authors:
+  - name: "Pokee AI"
+  - family-names: "Zhu"
+    given-names: "Bill"
+    affiliation: "Pokee AI"
+version: "v0.1-part1"
+date-released: "2026-09-22"
+repository-code: "https://github.com/Pokee-AI/bits-not-tokens"
+url: "https://github.com/Pokee-AI/bits-not-tokens"
+license: "Apache-2.0"
+keywords:
+  - language models
+  - memorization
+  - data curation
+  - synthetic benchmarks
+# doi: <DOI pending — Zenodo archive of the v0.1-part1 release>
