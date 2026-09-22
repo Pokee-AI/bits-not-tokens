@@ -10,3 +10,4 @@ export GIT_SSH_COMMAND="ssh -i $KEY -o IdentitiesOnly=yes -o BatchMode=yes"
 git remote get-url gpu >/dev/null 2>&1 || git remote add gpu "$REMOTE:bits-not-tokens"
 ssh -i "$KEY" -o IdentitiesOnly=yes -o BatchMode=yes "$REMOTE" 'cd ~/bits-not-tokens && git config receive.denyCurrentBranch updateInstead'
 git push gpu HEAD:"$(git branch --show-current)"
+if git remote get-url origin >/dev/null 2>&1; then git push origin HEAD; fi
