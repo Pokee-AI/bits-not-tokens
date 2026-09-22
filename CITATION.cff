@@ -2,9 +2,8 @@ cff-version: 1.2.0
 message: "If you use this repository, please cite it as below."
 title: "Bits, not tokens: what a small language model stores is set by exposure rate"
 authors:
-  - name: "Pokee AI"
   - family-names: "Zhu"
-    given-names: "Bill"
+    given-names: "Zheqing"
     affiliation: "Pokee AI"
 version: "v0.1-part1"
 date-released: "2026-09-22"

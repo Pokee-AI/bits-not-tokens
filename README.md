@@ -95,10 +95,10 @@ each fact its quota and then drops it forgets everything dropped.
 ```bibtex
 @misc{zhu2026bitsnottokens,
   title        = {Bits, not tokens: what a small language model stores is set by exposure rate},
-  author       = {Zhu, Bill and {Pokee AI}},
+  author       = {Zhu, Zheqing},
   year         = {2026},
-  howpublished = {\url{https://github.com/Pokee-AI/bits-not-tokens}},
-  note         = {Version v0.1-part1}
+  publisher    = {Pokee AI},
+  howpublished = {\url{https://github.com/Pokee-AI/bits-not-tokens}}
 }
 ```
 
