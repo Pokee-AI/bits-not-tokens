@@ -13,7 +13,7 @@ while [[ $i -lt ${#jobs[@]} ]]; do
     [[ -n $p ]] && kill -0 "$p" 2>/dev/null && continue   # our own job still starting up
     read -r corpus seed extra <<< "${jobs[$i]}"
     # shellcheck disable=SC2086
-    out=$("$ROOT/scripts/launch.sh" "$g" "$corpus" "$seed" $extra)
+    out=$("$ROOT/scripts/ops/launch.sh" "$g" "$corpus" "$seed" $extra)
     echo "$(date -u +%FT%TZ) $out"
     pid_on_gpu[$g]=$(sed -n 's/.*pid \([0-9]*\).*/\1/p' <<< "$out")
     i=$((i + 1))

@@ -1,68 +1,86 @@
 # Bits, not tokens
 
-**What a small language model stores from a corpus is set by how often each fact is
-repeated — its exposure *rate* — not by how many bits the corpus delivers, and not by how
-many tokens it costs.** In a synthetic world of 1,000,000 random 12-bit facts, flattening a
-web-like (Zipf) repetition profile stores 2.0× (2M-parameter model), 2.8× (8M) and 4.5–5.1×
-(31M) more facts from the same 300M-token budget, with no loss on the raw distribution;
-removing noise tokens buys more documents but no more facts; and a stationary stream reaches
-its steady state within ~10⁷ documents and does not grow with 2× or 4× longer training.
-The advantage holds under five optimizer recipes; forgetting is finite without weight decay
-and scales with the learning rate. (Figures: `figures/v4_fig_dose_response.png`,
-`figures/v5_fig_optimizer.png`; numbers: `RESULTS_V4.md`, `RESULTS_V5.md`.)
+What a small language model stores from a corpus is set by how often each fact is repeated
+— its exposure **rate** — not by how many tokens the corpus costs or how many bits it
+delivers. In a synthetic world of 1,000,000 random 12-bit facts, flattening a web-like (Zipf)
+repetition profile lets the same model store 2–5× more facts from the same 300M-token budget,
+with no loss on the raw distribution; removing noise tokens buys more documents but no more
+facts; and a stationary stream reaches its steady state within ~10⁷ documents and does not
+grow with 2× or 4× longer training. The advantage holds under five optimizer recipes, and
+forgetting is finite even without weight decay, scaling with the learning rate.
 
-This repository is the complete record of five pre-registered rounds, including three
-that failed. Criteria files were committed before each round's runs and never edited;
-`DEVIATIONS.md` lists every departure from the briefs, including two operational restarts.
+![Facts stored versus flattening level, one panel per model size](figures/v4_fig_dose_response.png)
 
-## The five rounds
+## Headline numbers
 
-| round | question | brief | criteria (frozen before runs) | results | verdict |
-|---|---|---|---|---|---|
-| v1 | Does "bits delivered" collapse learning curves; is the loss exponent set by the data? | `briefs/v1.md` | `PASS_CRITERIA.md` | `RESULTS.md` | **H1 FAIL, H2 FAIL** — a fact needs ~50 exposures to be stored; a corpus with no heavily repeated fact stores nothing |
-| v2 | Does an exposure-corrected axis (I_eff, frozen n0) collapse held-out corpora? | `briefs/v2.md` | `PASS_CRITERIA_v2.md` | `RESULTS.md` (v2 section) | **FAIL** — 16 or 32 exposures of every fact store 0 %; absorption is a sigmoid in exposures and depends on the rest of the corpus |
-| v3 | The premise: does capping repetition at what the learner needs store several times more? | `briefs/v3.md` | `PASS_CRITERIA_v3.md`, `C_STAR.md` | `RESULTS_V3.md` | **P1 FAIL, P2 FAIL** — a hard cap causes total forgetting of every capped fact (a sliding window, not accumulation) |
-| v4 | The premise, made stationary: flatten the distribution instead of capping | `briefs/v4.md` | `PASS_CRITERIA_v4.md`, `results/v4_predicted.csv` | `RESULTS_V4.md` | **P1 FAIL (3× bar met by the 31M model only, 5.1×), P2 FAIL**; absorption is a function of exposure *rate*; noise removal buys nothing |
-| v5 | Is v4 a property of the learner or of the optimizer recipe? | `briefs/v5.md` | `CRITERIA_v5.md` | `RESULTS_V5.md` | **R1 ROBUST** under all recipes; **R2 steady state** confirmed; half-life scales with 1/lr, not 1/(lr·wd) |
+Facts stored at B = 300M training tokens (top-1 on delivered facts, chance-corrected), base
+recipe, at the flattening level pre-selected for each size. Means over 5 seeds (RAW, FLAT) or
+3 seeds (CURATED); ratios with 95 % t-intervals over the confirmation seeds (`RESULTS_V5.md`, R4).
 
-Model: GPT-2-style decoder (L: 10 layers, d = 512, 31.5M non-embedding parameters; S and M
-in `configs/models.yaml`), one document per row, AdamW, single pass. World seed 0
-throughout; every run is determined by (corpus config, run seed) and was verified bit-exact
-on rerun.
+| model (non-embedding params) | RAW (web-like) | FLAT (repetition flattened) | ratio FLAT / RAW | CURATED (flattened, noise removed) | ratio CURATED / RAW | raw-distribution accuracy RAW → FLAT |
+|---|---|---|---|---|---|---|
+| S (2.0M) | 17,598 | 35,246 (level 300) | **1.98** [1.82, 2.15] | 38,605 | 2.18 [1.89, 2.47] | 0.770 → 0.841 |
+| M (8.0M) | 45,399 | 129,201 (level 100) | **2.84** [2.79, 2.89] | 128,082 | 2.82 [2.73, 2.91] | 0.861 → 0.935 |
+| L (31.5M) | 68,033 | 303,232 (level 30) | **4.47** [4.39, 4.54] | 349,328 | 5.10 [5.06, 5.15] | 0.890 → 0.912 |
+
+Against the pre-registered bars: the 3× curated-vs-raw bar (P1) is met by L only; a 2M model on
+curated data does not match a 31M model on raw data (P2), though an 8M model does; the head-loss
+guard (P3) passes at every selected level. Details and verdicts in `RESULTS_V4.md`; robustness,
+steady state, retention half-lives and intervals in `RESULTS_V5.md`.
+
+## The experiment
+
+Two pre-registered rounds. **v4** (`briefs/v4.md`, `PASS_CRITERIA_v4.md`, `RESULTS_V4.md`):
+three corpus types — RAW (i.i.d. from a shifted Zipf over all facts, 16 noise tokens per
+document), FLAT-c (the same distribution with probabilities capped at a level c, so a capped
+fact gets c expected exposures) and CURATED-c (FLAT-c without noise tokens) — at four levels,
+three model sizes, two seeds, plus predictions committed before launch. **v5** (`briefs/v5.md`,
+`CRITERIA_v5.md`, `RESULTS_V5.md`): the same comparison under five optimizer recipes, at 2× and
+4× the budget, with a retention probe measuring forgetting directly, and three more seeds.
+
+Model: GPT-2-style decoder (S 6×168, M 8×288, L 10×512; `configs/models.yaml`), one document
+per row, AdamW, single pass. World seed 0 throughout; every run is determined by (corpus
+config, seed) and was reproduced bit-exact on rerun. Object losses are in bits over the
+4,096-object softmax (`DEVIATIONS.md` #1). `DEVIATIONS.md` lists every departure from the
+briefs, including two operational restarts of the v4 queue.
 
 ## Quickstart
 
 ```bash
 uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requirements.txt
-.venv/bin/python -m pytest -q                       # CPU tests (< 1 min); add -m slow for the GPU learnability test
-.venv/bin/python analysis/make_figures_v4.py        # regenerates the v4 figures and results/v4_summary.json from CSVs, no GPU
+.venv/bin/python -m pytest -q                        # CPU tests (< 1 min); -m slow adds the GPU learnability test
+.venv/bin/python analysis/make_figures_v4.py         # v4 figures + results/v4_summary.json from CSVs, no GPU
+.venv/bin/python analysis/make_figures_v5.py         # v5 figures + results/v5_summary.json, no GPU
+scripts/run_all.sh                                   # rerun the whole matrix on idle GPUs (~7 h on 8 H100s)
 ```
 
-`make_figures.py`, `make_figures_v3.py` and `make_figures_v5.py` do the same for the other
-rounds. To rerun training: `scripts/run_all.sh "1 2"` launches the v1 matrix on idle GPUs;
-a single run is `train/train.py --corpus configs/<name>.yaml --seed 1` (v3–v5 runs take the
-extra flags recorded in `scripts/ops/queue_*.txt`).
+A single run: `train/train.py --corpus configs/v3/FLAT.yaml --model M --seed 1 --v5 --budget-tokens
+300000000 --tau <tau> --warmup-docs 300000 --level 100 --corpus-type FLAT --setting base`; the
+exact flags for every run are in `scripts/ops/queue_*.txt`, and τ per level in `results/v4_levels.csv`.
 
 ## Layout
 
 ```
-briefs/             the experiment briefs, v1–v5, as given (with the amendments each round adopted)
-PASS_CRITERIA*.md   pre-registered pass criteria (v1, v2, v3, v4); CRITERIA_v5.md; C_STAR.md (v3 constants)
-RESULTS*.md         results per round; DEVIATIONS.md lists every departure from the briefs
-configs/            corpora (v1/v2 in configs/, v3–v5 in configs/v3/), model sizes, probe settings
-synth/              world (facts, templates, vocabulary), document streams, closed forms
-train/              model and trainer (constant LR + cooldown branches; token budgets; probe; schedules)
-eval/               evaluators (object loss, facts stored, head guard, unseen-fact control, probe)
-analysis/           fit/collapse (v1–v2), phase 0/A/premise (v3), v4 and v5 analyses, figure scripts
-results/            one CSV per run under results/*runs*/, merged CSVs, fits, predictions, summaries
-figures/            all figures (png + pdf)
-tests/              generator, closed forms, document format, learnability, streams, probe
-scripts/            run_all.sh, launch.sh; scripts/ops/ holds queue files and server helpers
-artifacts/, logs/   not in git: per-run n_k / per-fact hit / exposure-time arrays and run logs
+briefs/                 the v4 and v5 briefs as given
+PASS_CRITERIA_v4.md     pre-registered v4 criteria; CRITERIA_v5.md — v5 criteria; C_STAR.md — frozen warm-up lengths
+RESULTS_V4.md, RESULTS_V5.md, DEVIATIONS.md
+configs/                models.yaml, frozen learning rates (v3_lr.yaml), corpora (configs/v3/: RAW, FLAT, CURATEDF), probe (v5.yaml)
+synth/                  world (facts, templates, vocabulary), document streams, closed forms, τ solver
+train/                  model and trainer (token budgets, cooldown branches, schedules, probe)
+eval/                   evaluators (object loss, facts stored, raw-distribution accuracy, head loss, control, probe)
+analysis/               v4_analysis / v4_predict / v5_analysis and the two figure scripts
+results/                v4_runs/, v5_runs/ (one CSV per run), baseline_raw/ (RAW baselines), merged tables, predictions, summaries
+figures/                all figures (png + pdf)
+tests/                  world and document format, learnability (GPU), flat stream and τ, eval set, retention probe
+scripts/                run_all.sh; scripts/ops/ holds the launcher, queue runner and the exact job lists
+artifacts/, logs/       not in git: per-run n_k, per-fact hits, exposure times, probe logs, run logs
 ```
 
-Object losses are in bits over the 4,096-object softmax (`DEVIATIONS.md` #1). The synthetic
-world contains only arbitrary random facts: nothing here is about generalisation, reasoning
-or compressible structure.
+Some frozen files (`RESULTS_V4.md`, `RESULTS_V5.md`, `PASS_CRITERIA_v4.md`, `C_STAR.md`,
+`configs/v3/`) refer to "v3": that is the earlier design round in which the RAW baselines and
+warm-up constants were produced. The three earlier rounds — two failed x-axis hypotheses and a
+capped-repetition design that caused total forgetting — are preserved byte-for-byte on branch
+`archive/rounds-1-3`.
 
-License: Apache 2.0.
+This world contains only arbitrary random facts: nothing here is about generalisation,
+reasoning or compressible structure. License: Apache 2.0.
