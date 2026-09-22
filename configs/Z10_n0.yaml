@@ -1,5 +1,0 @@
-name: Z10_n0
-sampling: zipf
-zipf_a: 1.0
-filler_n: 0
-max_docs: 10000000

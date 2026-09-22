@@ -1413,42 +1413,42 @@
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "1",
-   "frac_stored": 0.0007854809939640999
+   "frac_stored": 0.0007854809939641692
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "2",
-   "frac_stored": 0.00202157640087645
+   "frac_stored": 0.0020215764008764798
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "3-4",
-   "frac_stored": 0.0043669064457052004
+   "frac_stored": 0.004366906445705271
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "5-8",
-   "frac_stored": 0.0132261781848915
+   "frac_stored": 0.013226178184891517
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "9-16",
-   "frac_stored": 0.05313435955419055
+   "frac_stored": 0.05313435955419059
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "17-32",
-   "frac_stored": 0.24135200451258448
+   "frac_stored": 0.24135200451258454
   },
   {
    "model_size": "L",
@@ -1483,42 +1483,42 @@
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "1",
-   "frac_stored": 0.00066355538654995
+   "frac_stored": 0.0006635553865499909
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "2",
-   "frac_stored": 0.0014799908233629
+   "frac_stored": 0.001479990823362952
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "3-4",
-   "frac_stored": 0.00348173902446
+   "frac_stored": 0.00348173902446004
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "5-8",
-   "frac_stored": 0.01063712152587885
+   "frac_stored": 0.010637121525878871
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "9-16",
-   "frac_stored": 0.0445994621371215
+   "frac_stored": 0.04459946213712154
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "17-32",
-   "frac_stored": 0.22494808406361755
+   "frac_stored": 0.22494808406361758
   },
   {
    "model_size": "L",
@@ -1532,7 +1532,7 @@
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "65-128",
-   "frac_stored": 0.986868555691216
+   "frac_stored": 0.9868685556912161
   },
   {
    "model_size": "L",
@@ -1553,35 +1553,35 @@
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "1",
-   "frac_stored": 0.001421072390992
+   "frac_stored": 0.0014210723909920623
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "2",
-   "frac_stored": 0.0035752023737509
+   "frac_stored": 0.0035752023737509594
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "3-4",
-   "frac_stored": 0.010061165114611
+   "frac_stored": 0.010061165114611081
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "5-8",
-   "frac_stored": 0.0315733583894484
+   "frac_stored": 0.03157335838944848
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "9-16",
-   "frac_stored": 0.1163855083304639
+   "frac_stored": 0.11638550833046396
   },
   {
    "model_size": "L",
@@ -1623,42 +1623,42 @@
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "1",
-   "frac_stored": 0.00068814236649565
+   "frac_stored": 0.000688142366495717
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "2",
-   "frac_stored": 0.00166703114238435
+   "frac_stored": 0.001667031142384391
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "3-4",
-   "frac_stored": 0.0038686905716938
+   "frac_stored": 0.003868690571693892
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "5-8",
-   "frac_stored": 0.01172513843713085
+   "frac_stored": 0.011725138437130859
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "9-16",
-   "frac_stored": 0.050681621369381
+   "frac_stored": 0.050681621369381036
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "17-32",
-   "frac_stored": 0.24730070415425653
+   "frac_stored": 0.24730070415425662
   },
   {
    "model_size": "L",
@@ -1714,42 +1714,42 @@
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "5-8",
-   "frac_stored": 0.00283621024011635
+   "frac_stored": 0.002836210240116379
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "9-16",
-   "frac_stored": 0.0127876879479049
+   "frac_stored": 0.012787687947904953
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "17-32",
-   "frac_stored": 0.0737815217574336
+   "frac_stored": 0.07378152175743365
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "33-64",
-   "frac_stored": 0.17550772775061485
+   "frac_stored": 0.17550772775061488
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "65-128",
-   "frac_stored": 0.1135136481729697
+   "frac_stored": 0.11351364817296976
   },
   {
    "model_size": "L",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "129-256",
-   "frac_stored": 0.11149427855865715
+   "frac_stored": 0.11149427855865719
   },
   {
    "model_size": "L",
@@ -1763,21 +1763,21 @@
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "1",
-   "frac_stored": 0.00580525278194065
+   "frac_stored": 0.005805252781940676
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "2",
-   "frac_stored": 0.0196941932020672
+   "frac_stored": 0.019694193202067226
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "3-4",
-   "frac_stored": 0.0547340087327092
+   "frac_stored": 0.054734008732709234
   },
   {
    "model_size": "L",
@@ -1833,28 +1833,28 @@
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "1",
-   "frac_stored": 0.0069461058096030506
+   "frac_stored": 0.006946105809603093
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "2",
-   "frac_stored": 0.021715618508860647
+   "frac_stored": 0.021715618508860654
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "3-4",
-   "frac_stored": 0.05706063022081495
+   "frac_stored": 0.05706063022081498
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "5-8",
-   "frac_stored": 0.17802066048396914
+   "frac_stored": 0.1780206604839692
   },
   {
    "model_size": "L",
@@ -1875,21 +1875,21 @@
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "33-64",
-   "frac_stored": 0.9808360423596515
+   "frac_stored": 0.9808360423596514
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "65-128",
-   "frac_stored": 0.9969036415955046
+   "frac_stored": 0.9969036415955045
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "129-256",
-   "frac_stored": 0.9994131441971607
+   "frac_stored": 0.9994131441971605
   },
   {
    "model_size": "L",
@@ -1903,35 +1903,35 @@
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "1",
-   "frac_stored": 0.00291824338660405
+   "frac_stored": 0.0029182433866041155
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "2",
-   "frac_stored": 0.01017058838389705
+   "frac_stored": 0.010170588383897096
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "3-4",
-   "frac_stored": 0.0320797841837095
+   "frac_stored": 0.03207978418370955
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "5-8",
-   "frac_stored": 0.11558402964534865
+   "frac_stored": 0.1155840296453487
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "9-16",
-   "frac_stored": 0.3913655603919613
+   "frac_stored": 0.39136556039196135
   },
   {
    "model_size": "L",
@@ -1973,28 +1973,28 @@
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "1",
-   "frac_stored": 0.0061047580062206005
+   "frac_stored": 0.006104758006220682
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "2",
-   "frac_stored": 0.01981173305349815
+   "frac_stored": 0.019811733053498197
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "3-4",
-   "frac_stored": 0.05513551946518975
+   "frac_stored": 0.055135519465189804
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "5-8",
-   "frac_stored": 0.1809691545429316
+   "frac_stored": 0.18096915454293164
   },
   {
    "model_size": "L",
@@ -2008,14 +2008,14 @@
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "17-32",
-   "frac_stored": 0.9022510923209676
+   "frac_stored": 0.9022510923209675
   },
   {
    "model_size": "L",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "33-64",
-   "frac_stored": 0.995972362108642
+   "frac_stored": 0.9959723621086419
   },
   {
    "model_size": "L",
@@ -2043,35 +2043,35 @@
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "1",
-   "frac_stored": 0.0055737965934811
+   "frac_stored": 0.005573796593481173
   },
   {
    "model_size": "L",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "2",
-   "frac_stored": 0.01726507598273375
+   "frac_stored": 0.017265075982733802
   },
   {
    "model_size": "L",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "3-4",
-   "frac_stored": 0.04663685709359145
+   "frac_stored": 0.04663685709359146
   },
   {
    "model_size": "L",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "5-8",
-   "frac_stored": 0.1467935231217291
+   "frac_stored": 0.14679352312172916
   },
   {
    "model_size": "L",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "9-16",
-   "frac_stored": 0.43172457532922764
+   "frac_stored": 0.4317245753292277
   },
   {
    "model_size": "L",
@@ -2113,49 +2113,49 @@
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "1",
-   "frac_stored": 0.00028050129860235
+   "frac_stored": 0.0002805012986023933
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "2",
-   "frac_stored": 0.00087469448156095
+   "frac_stored": 0.0008746944815609662
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "3-4",
-   "frac_stored": 0.00159925880294585
+   "frac_stored": 0.0015992588029458748
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "5-8",
-   "frac_stored": 0.0050350348779235
+   "frac_stored": 0.005035034877923582
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "9-16",
-   "frac_stored": 0.0180378432009933
+   "frac_stored": 0.018037843200993307
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "17-32",
-   "frac_stored": 0.09186838215472626
+   "frac_stored": 0.09186838215472631
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "33-64",
-   "frac_stored": 0.4179432491161752
+   "frac_stored": 0.41794324911617525
   },
   {
    "model_size": "M",
@@ -2183,42 +2183,42 @@
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "1",
-   "frac_stored": 0.00027564795766645
+   "frac_stored": 0.0002756479576665016
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "2",
-   "frac_stored": 0.00086283858079765
+   "frac_stored": 0.0008628385807976818
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "3-4",
-   "frac_stored": 0.0018918870956544502
+   "frac_stored": 0.0018918870956544916
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "5-8",
-   "frac_stored": 0.005110896217293499
+   "frac_stored": 0.0051108962172935115
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "9-16",
-   "frac_stored": 0.0207346468260865
+   "frac_stored": 0.02073464682608655
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "17-32",
-   "frac_stored": 0.1057476586104174
+   "frac_stored": 0.10574765861041743
   },
   {
    "model_size": "M",
@@ -2246,7 +2246,7 @@
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": ">=257",
-   "frac_stored": 0.99900178433646
+   "frac_stored": 0.9990017843364599
   },
   {
    "model_size": "M",
@@ -2260,35 +2260,35 @@
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "2",
-   "frac_stored": 0.0004239703716076
+   "frac_stored": 0.0004239703716076275
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "3-4",
-   "frac_stored": 0.0008215418587006001
+   "frac_stored": 0.0008215418587006757
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "5-8",
-   "frac_stored": 0.00250739325203685
+   "frac_stored": 0.002507393252036862
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "9-16",
-   "frac_stored": 0.0094428935735262
+   "frac_stored": 0.009442893573526281
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "17-32",
-   "frac_stored": 0.05267519706784565
+   "frac_stored": 0.05267519706784568
   },
   {
    "model_size": "M",
@@ -2323,42 +2323,42 @@
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "1",
-   "frac_stored": 0.00025668324743915
+   "frac_stored": 0.00025668324743920255
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "2",
-   "frac_stored": 0.0007014522993152501
+   "frac_stored": 0.0007014522993152839
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "3-4",
-   "frac_stored": 0.00147801299107015
+   "frac_stored": 0.0014780129910701998
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "5-8",
-   "frac_stored": 0.00393116150408985
+   "frac_stored": 0.003931161504089871
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "9-16",
-   "frac_stored": 0.01639977544497595
+   "frac_stored": 0.016399775444975992
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "17-32",
-   "frac_stored": 0.08691579915661754
+   "frac_stored": 0.0869157991566176
   },
   {
    "model_size": "M",
@@ -2379,7 +2379,7 @@
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "129-256",
-   "frac_stored": 0.9976475576651838
+   "frac_stored": 0.9976475576651836
   },
   {
    "model_size": "M",
@@ -2407,49 +2407,49 @@
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "3-4",
-   "frac_stored": 0.000642384197695
+   "frac_stored": 0.0006423841976950354
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "5-8",
-   "frac_stored": 0.0011380621766228
+   "frac_stored": 0.001138062176622854
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "9-16",
-   "frac_stored": 0.00390736507930435
+   "frac_stored": 0.003907365079304419
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "17-32",
-   "frac_stored": 0.023523351391207398
+   "frac_stored": 0.023523351391207453
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "33-64",
-   "frac_stored": 0.0636249605893467
+   "frac_stored": 0.06362496058934675
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "65-128",
-   "frac_stored": 0.03968446725408105
+   "frac_stored": 0.03968446725408112
   },
   {
    "model_size": "M",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "129-256",
-   "frac_stored": 0.03364645507383885
+   "frac_stored": 0.03364645507383893
   },
   {
    "model_size": "M",
@@ -2463,35 +2463,35 @@
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "1",
-   "frac_stored": 0.0007505056553246999
+   "frac_stored": 0.0007505056553247351
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "2",
-   "frac_stored": 0.00212826183685405
+   "frac_stored": 0.0021282618368541027
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "3-4",
-   "frac_stored": 0.0074174186760493505
+   "frac_stored": 0.007417418676049406
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "5-8",
-   "frac_stored": 0.031159331199722903
+   "frac_stored": 0.031159331199722945
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "9-16",
-   "frac_stored": 0.15588539827588574
+   "frac_stored": 0.1558853982758858
   },
   {
    "model_size": "M",
@@ -2533,28 +2533,28 @@
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "1",
-   "frac_stored": 0.0011817912876411
+   "frac_stored": 0.0011817912876411546
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "2",
-   "frac_stored": 0.0035129920165947503
+   "frac_stored": 0.0035129920165947928
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "3-4",
-   "frac_stored": 0.01115929981999015
+   "frac_stored": 0.011159299819990174
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "5-8",
-   "frac_stored": 0.04318930930075565
+   "frac_stored": 0.04318930930075569
   },
   {
    "model_size": "M",
@@ -2589,49 +2589,49 @@
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "129-256",
-   "frac_stored": 0.9946159243160696
+   "frac_stored": 0.9946159243160695
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": ">=257",
-   "frac_stored": 0.9997000246457983
+   "frac_stored": 0.9997000246457984
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "1",
-   "frac_stored": 0.00043042408769295
+   "frac_stored": 0.00043042408769296226
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "2",
-   "frac_stored": 0.00106353415007335
+   "frac_stored": 0.0010635341500734182
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "3-4",
-   "frac_stored": 0.00320038658231225
+   "frac_stored": 0.00320038658231229
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "5-8",
-   "frac_stored": 0.01229142814915055
+   "frac_stored": 0.01229142814915061
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "9-16",
-   "frac_stored": 0.0637897875117672
+   "frac_stored": 0.06378978751176723
   },
   {
    "model_size": "M",
@@ -2673,35 +2673,35 @@
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "1",
-   "frac_stored": 0.0010841359947453
+   "frac_stored": 0.001084135994745353
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "2",
-   "frac_stored": 0.0033027739706423496
+   "frac_stored": 0.0033027739706424195
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "3-4",
-   "frac_stored": 0.010367440758413851
+   "frac_stored": 0.010367440758413888
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "5-8",
-   "frac_stored": 0.0410915844484534
+   "frac_stored": 0.04109158444845343
   },
   {
    "model_size": "M",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "9-16",
-   "frac_stored": 0.19161109010357025
+   "frac_stored": 0.1916110901035703
   },
   {
    "model_size": "M",
@@ -2743,35 +2743,35 @@
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "1",
-   "frac_stored": 0.0011800483230793
+   "frac_stored": 0.001180048323079375
   },
   {
    "model_size": "M",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "2",
-   "frac_stored": 0.0035040333132965
+   "frac_stored": 0.0035040333132965677
   },
   {
    "model_size": "M",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "3-4",
-   "frac_stored": 0.01036629008127855
+   "frac_stored": 0.010366290081278602
   },
   {
    "model_size": "M",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "5-8",
-   "frac_stored": 0.0409066998057825
+   "frac_stored": 0.040906699805782556
   },
   {
    "model_size": "M",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "9-16",
-   "frac_stored": 0.1794256789546934
+   "frac_stored": 0.17942567895469344
   },
   {
    "model_size": "M",
@@ -2792,7 +2792,7 @@
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "65-128",
-   "frac_stored": 0.9408185721131902
+   "frac_stored": 0.9408185721131903
   },
   {
    "model_size": "M",
@@ -2820,49 +2820,49 @@
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "2",
-   "frac_stored": 0.00011751439502410671
+   "frac_stored": 0.00011751439502411871
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "3-4",
-   "frac_stored": 0.0002381866722253
+   "frac_stored": 0.00023818667222535978
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "5-8",
-   "frac_stored": 0.0003604868008867
+   "frac_stored": 0.0003604868008867473
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "9-16",
-   "frac_stored": 0.00118346256456215
+   "frac_stored": 0.0011834625645621728
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "17-32",
-   "frac_stored": 0.0042283534422068
+   "frac_stored": 0.004228353442206817
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "33-64",
-   "frac_stored": 0.02367578490530315
+   "frac_stored": 0.0236757849053032
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "100",
    "bin": "65-128",
-   "frac_stored": 0.1309019198097883
+   "frac_stored": 0.13090191980978833
   },
   {
    "model_size": "S",
@@ -2897,42 +2897,42 @@
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "3-4",
-   "frac_stored": 0.00015072388166235002
+   "frac_stored": 0.00015072388166238954
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "5-8",
-   "frac_stored": 0.0003669958332593
+   "frac_stored": 0.0003669958332593672
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "9-16",
-   "frac_stored": 0.0012317854827674
+   "frac_stored": 0.001231785482767428
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "17-32",
-   "frac_stored": 0.0048010983250217
+   "frac_stored": 0.004801098325021749
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "33-64",
-   "frac_stored": 0.027889851102139998
+   "frac_stored": 0.027889851102140054
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "1000",
    "bin": "65-128",
-   "frac_stored": 0.1787192110145825
+   "frac_stored": 0.17871921101458255
   },
   {
    "model_size": "S",
@@ -2953,14 +2953,14 @@
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "1",
-   "frac_stored": 6.0801019232566334e-05
+   "frac_stored": 6.080101923259581e-05
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "2",
-   "frac_stored": 0.00010383264192934858
+   "frac_stored": 0.00010383264192939383
   },
   {
    "model_size": "S",
@@ -2981,42 +2981,42 @@
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "9-16",
-   "frac_stored": 0.00018894392235744998
+   "frac_stored": 0.00018894392235749502
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "17-32",
-   "frac_stored": 0.0006249574422722
+   "frac_stored": 0.0006249574422722639
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "33-64",
-   "frac_stored": 0.00202195678882105
+   "frac_stored": 0.0020219567888210936
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "65-128",
-   "frac_stored": 0.006758277402211
+   "frac_stored": 0.006758277402211023
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": "129-256",
-   "frac_stored": 0.0054382012202615
+   "frac_stored": 0.005438201220261502
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "30",
    "bin": ">=257",
-   "frac_stored": 0.0037764887505687995
+   "frac_stored": 0.003776488750568862
   },
   {
    "model_size": "S",
@@ -3037,42 +3037,42 @@
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "3-4",
-   "frac_stored": 0.0002320254191811
+   "frac_stored": 0.0002320254191811575
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "5-8",
-   "frac_stored": 0.00040901666115525
+   "frac_stored": 0.00040901666115533903
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "9-16",
-   "frac_stored": 0.001011388724293
+   "frac_stored": 0.0010113887242930377
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "17-32",
-   "frac_stored": 0.0047837158362959
+   "frac_stored": 0.004783715836295933
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "33-64",
-   "frac_stored": 0.0280433053185747
+   "frac_stored": 0.028043305318574734
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "300",
    "bin": "65-128",
-   "frac_stored": 0.16881322410702088
+   "frac_stored": 0.16881322410702093
   },
   {
    "model_size": "S",
@@ -3107,14 +3107,14 @@
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "3-4",
-   "frac_stored": 0.0006507542698948501
+   "frac_stored": 0.000650754269894895
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "5-8",
-   "frac_stored": 0.00011139557290973894
+   "frac_stored": 0.00011139557290976832
   },
   {
    "model_size": "S",
@@ -3128,14 +3128,14 @@
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "17-32",
-   "frac_stored": 0.00010666350733892077
+   "frac_stored": 0.00010666350733894308
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "33-64",
-   "frac_stored": 0.00024847643086375003
+   "frac_stored": 0.0002484764308638024
   },
   {
    "model_size": "S",
@@ -3149,63 +3149,63 @@
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": "129-256",
-   "frac_stored": 0.00014496443336575
+   "frac_stored": 0.00014496443336575878
   },
   {
    "model_size": "S",
    "corpus_type": "CURATED",
    "level": "x30",
    "bin": ">=257",
-   "frac_stored": 0.00043520720108695
+   "frac_stored": 0.0004352072010869565
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "1",
-   "frac_stored": 0.00011250238411459999
+   "frac_stored": 0.00011250238411463531
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "2",
-   "frac_stored": 0.0002434161152257
+   "frac_stored": 0.00024341611522576623
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "3-4",
-   "frac_stored": 0.00049012235164245
+   "frac_stored": 0.0004901223516425113
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "5-8",
-   "frac_stored": 0.00127886002571025
+   "frac_stored": 0.0012788600257103186
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "9-16",
-   "frac_stored": 0.0049530709768517995
+   "frac_stored": 0.0049530709768518585
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "17-32",
-   "frac_stored": 0.02403269529865795
+   "frac_stored": 0.02403269529865797
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "100",
    "bin": "33-64",
-   "frac_stored": 0.1296189622879279
+   "frac_stored": 0.12961896228792794
   },
   {
    "model_size": "S",
@@ -3233,49 +3233,49 @@
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "1",
-   "frac_stored": 0.000127176645376174
+   "frac_stored": 0.00012717664537621536
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "2",
-   "frac_stored": 0.0003071182085616
+   "frac_stored": 0.000307118208561656
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "3-4",
-   "frac_stored": 0.00055442019904065
+   "frac_stored": 0.0005544201990406688
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "5-8",
-   "frac_stored": 0.0013743273288679
+   "frac_stored": 0.00137432732886795
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "9-16",
-   "frac_stored": 0.0068339389525198
+   "frac_stored": 0.0068339389525198194
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "17-32",
-   "frac_stored": 0.0334999044183264
+   "frac_stored": 0.03349990441832644
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "33-64",
-   "frac_stored": 0.1805750349000722
+   "frac_stored": 0.18057503490007223
   },
   {
    "model_size": "S",
@@ -3289,14 +3289,14 @@
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": "129-256",
-   "frac_stored": 0.9258652584433128
+   "frac_stored": 0.9258652584433129
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "1000",
    "bin": ">=257",
-   "frac_stored": 0.9957641694176359
+   "frac_stored": 0.995764169417636
   },
   {
    "model_size": "S",
@@ -3324,98 +3324,98 @@
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "5-8",
-   "frac_stored": 0.00012110595069495891
+   "frac_stored": 0.00012110595069500461
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "9-16",
-   "frac_stored": 0.00012811598982530434
+   "frac_stored": 0.0001281159898253381
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "17-32",
-   "frac_stored": 0.00031175383924610816
+   "frac_stored": 0.0003117538392461354
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "33-64",
-   "frac_stored": 0.0008374316736431075
+   "frac_stored": 0.0008374316736431537
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "65-128",
-   "frac_stored": 0.00070492612602815
+   "frac_stored": 0.0007049261260281556
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": "129-256",
-   "frac_stored": 0.00052131256547215
+   "frac_stored": 0.000521312565472173
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "30",
    "bin": ">=257",
-   "frac_stored": 0.00044361728421595003
+   "frac_stored": 0.000443617284215956
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "1",
-   "frac_stored": 0.00011120575666461954
+   "frac_stored": 0.00011120575666465063
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "2",
-   "frac_stored": 0.00039404084947325
+   "frac_stored": 0.0003940408494732884
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "3-4",
-   "frac_stored": 0.0007182791874847
+   "frac_stored": 0.0007182791874847248
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "5-8",
-   "frac_stored": 0.00203194689337255
+   "frac_stored": 0.002031946893372592
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "9-16",
-   "frac_stored": 0.008367893495241651
+   "frac_stored": 0.008367893495241722
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "17-32",
-   "frac_stored": 0.04334188510260145
+   "frac_stored": 0.04334188510260149
   },
   {
    "model_size": "S",
    "corpus_type": "FLAT",
    "level": "300",
    "bin": "33-64",
-   "frac_stored": 0.21544283073848164
+   "frac_stored": 0.2154428307384817
   },
   {
    "model_size": "S",
@@ -3450,42 +3450,42 @@
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "2",
-   "frac_stored": 0.00025482197369555
+   "frac_stored": 0.00025482197369563813
   },
   {
    "model_size": "S",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "3-4",
-   "frac_stored": 0.00059732379445975
+   "frac_stored": 0.0005973237944597917
   },
   {
    "model_size": "S",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "5-8",
-   "frac_stored": 0.00175209032033495
+   "frac_stored": 0.0017520903203349857
   },
   {
    "model_size": "S",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "9-16",
-   "frac_stored": 0.006612150194629
+   "frac_stored": 0.006612150194629058
   },
   {
    "model_size": "S",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "17-32",
-   "frac_stored": 0.03096997622741465
+   "frac_stored": 0.030969976227414726
   },
   {
    "model_size": "S",
    "corpus_type": "RAW",
    "level": "RAW",
    "bin": "33-64",
-   "frac_stored": 0.16327318294202706
+   "frac_stored": 0.16327318294202708
   },
   {
    "model_size": "S",

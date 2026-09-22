@@ -1,7 +1,0 @@
-# v2 held-out corpus (PASS_CRITERIA_v2.md)
-name: EQ32_n0
-sampling: eq
-repeats: 32
-zipf_a: null
-filler_n: 0
-max_docs: 32000000

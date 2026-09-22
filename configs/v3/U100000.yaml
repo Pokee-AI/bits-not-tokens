@@ -1,5 +1,0 @@
-name: U100000
-sampling: uniform_subset   # uniform over the first k_sub facts of the popularity permutation
-k_sub: 100000
-filler_n: 0
-max_docs: 10000000
