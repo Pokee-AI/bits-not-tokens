@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Run a queue of jobs (one per line: "<corpus> <seed> [extra train.py args]") across idle
-# GPUs, one job per GPU. usage: nohup scripts/run_queue.sh queue.txt > logs/queue.log &
+# GPUs, one job per GPU. usage: nohup scripts/ops/run_queue.sh queue.txt > logs/queue.log &
 set -uo pipefail
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 declare -A pid_on_gpu
 mapfile -t jobs < "$1"
 i=0
