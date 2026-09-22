@@ -92,9 +92,14 @@ each fact its quota and then drops it forgets everything dropped.
 
 ## Cite
 
-```
-Pokee AI (Bill Zhu). Bits, not tokens: what a small language model stores is set by exposure
-rate. Version v0.1-part1, 2026. https://github.com/Pokee-AI/bits-not-tokens
+```bibtex
+@misc{zhu2026bitsnottokens,
+  title        = {Bits, not tokens: what a small language model stores is set by exposure rate},
+  author       = {Zhu, Bill and {Pokee AI}},
+  year         = {2026},
+  howpublished = {\url{https://github.com/Pokee-AI/bits-not-tokens}},
+  note         = {Version v0.1-part1}
+}
 ```
 
 `CITATION.cff` carries the same metadata. Zenodo DOI: <DOI pending>.
