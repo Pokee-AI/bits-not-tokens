@@ -56,8 +56,11 @@ def probe_table(df: pd.DataFrame) -> pd.DataFrame:
             run, r0.model_size, r0.setting, r0.corpus_type, r0.level, int(r0.seed), int(r0.budget_mult)
         p["docs_since_window"] = p.docs - PROBE["probe_window_hi"]
         rows.append(p)
+    csv = os.path.join(ROOT, "results", "v5_probe.csv")
+    if not rows:  # no artifacts/ (fresh clone): use the committed table
+        return pd.read_csv(csv)
     out = pd.concat(rows, ignore_index=True)
-    out.to_csv(os.path.join(ROOT, "results", "v5_probe.csv"), index=False)
+    out.to_csv(csv, index=False)
     return out
 
 
@@ -186,7 +189,12 @@ def evaluate(df: pd.DataFrame, probe: pd.DataFrame) -> dict:
             timing.append({"run": run, "model_size": r.model_size, "setting": r.setting, "corpus_type": r.corpus_type,
                            "seed": int(r.seed), "window": name, "n_facts": int(m.sum()),
                            "frac_stored": float(hit[m].mean() - 1 / 4096) if m.any() else np.nan})
-    out["timing"] = pd.DataFrame(timing)
+    tcsv = os.path.join(ROOT, "results", "v5_timing.csv")
+    if timing:
+        out["timing"] = pd.DataFrame(timing)
+        out["timing"].to_csv(tcsv, index=False)
+    else:  # no artifacts/ (fresh clone): use the committed table
+        out["timing"] = pd.read_csv(tcsv)
     out["never_left_plateau"] = df.groupby("run").obj_loss_bits_indist.min().pipe(lambda s: s[s > 11.5]).reset_index()
     out["final"] = fin
     return out

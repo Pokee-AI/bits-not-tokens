@@ -29,8 +29,9 @@ CHANCE = 1 / 4096
 
 
 def w_by_size() -> dict:
-    cs = pd.read_csv(os.path.join(ROOT, "results", "v3_cstar.csv")).set_index("model_size")
-    return {m: int(cs.loc[m, "W"]) for m in ["S", "M", "L"]}
+    """Warm-up W per size (documents), as frozen in C_STAR.md and recorded in results/v4_levels.csv."""
+    lv = pd.read_csv(os.path.join(ROOT, "results", "v4_levels.csv"))
+    return {m: int(lv[lv.model_size == m].W.iloc[0]) for m in ["S", "M", "L"]}
 
 
 def absorption_curve(size: str):
@@ -105,7 +106,7 @@ def main():
                           "predicted_weighted_acc_p": float((p * A(lam)).sum())})
     pd.DataFrame(levels).to_csv(os.path.join(ROOT, "results", "v4_levels.csv"), index=False)
     pd.DataFrame(preds).to_csv(os.path.join(ROOT, "results", "v4_predicted.csv"), index=False)
-    pd.concat(curves).to_csv(os.path.join(ROOT, "results", "v4_absorption_curve_v3raw.csv"), index=False)
+    pd.concat(curves).to_csv(os.path.join(ROOT, "results", "v4_absorption_curve_raw.csv"), index=False)
     pd.set_option("display.width", 250)
     print(pd.DataFrame(levels).round(3).to_string(index=False))
     print(pd.DataFrame(preds).round(3).to_string(index=False))

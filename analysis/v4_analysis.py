@@ -24,9 +24,9 @@ def load() -> pd.DataFrame:
     files = sorted(glob.glob(os.path.join(ROOT, "results", "v4_runs", "*.csv")))
     raw_v4 = [f for f in files if os.path.basename(f).startswith("RAW_")]
     # RAW: prefer the v4 rerun (adds weighted_acc_p / head_loss_bits); assert it equals the v3 rows
-    raw = sorted(glob.glob(os.path.join(ROOT, "results", "v3_phaseP", "RAW_seed*_*.csv")))
+    raw = sorted(glob.glob(os.path.join(ROOT, "results", "baseline_raw", "RAW_seed*_*.csv")))
     for f in raw_v4:
-        v3 = os.path.join(ROOT, "results", "v3_phaseP", os.path.basename(f))
+        v3 = os.path.join(ROOT, "results", "baseline_raw", os.path.basename(f))
         if os.path.exists(v3):
             a, b = pd.read_csv(v3), pd.read_csv(f)
             for col in ["docs", "train_tokens", "facts_delivered", "facts_stored", "obj_loss_bits_indist", "unseen_top1_acc"]:
@@ -62,8 +62,11 @@ def absorption(df: pd.DataFrame) -> pd.DataFrame:
             rows.append({"model_size": r.model_size, "corpus_type": r.corpus_type, "level": r.level, "seed": int(r.seed),
                          "bin": bin_label(lo, hi), "n_facts": int(m.sum()),
                          "frac_stored": (hit[m].mean() - CHANCE) if m.any() else np.nan})
+    csv = os.path.join(ROOT, "results", "v4_absorption.csv")
+    if not rows:  # no artifacts/ (fresh clone): use the committed table
+        return pd.read_csv(csv)
     out = pd.DataFrame(rows)
-    out.to_csv(os.path.join(ROOT, "results", "v4_absorption.csv"), index=False)
+    out.to_csv(csv, index=False)
     return out
 
 
