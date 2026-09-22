@@ -1,4 +1,4 @@
 # frozen learning rates for S and M (selected in the archived round on a dense uniform corpus: most facts stored after 1M docs)
 M: 0.0003
 S: 0.003
-L: 3.0e-4   # v1 frozen value (configs/common.yaml)
+L: 3.0e-4   # frozen value for L (configs/common.yaml)

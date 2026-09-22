@@ -1,4 +1,4 @@
-# v3 model sizes (same architecture family as v1). L is the v1 model.
+# Model sizes (same architecture family). L is the original 31M-parameter model.
 S: {n_layers: 6, d_model: 168, n_heads: 6, mlp_ratio: 4}
 M: {n_layers: 8, d_model: 288, n_heads: 8, mlp_ratio: 4}
 L: {n_layers: 10, d_model: 512, n_heads: 8, mlp_ratio: 4}
